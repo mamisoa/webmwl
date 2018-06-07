@@ -1,0 +1,86 @@
+{{extend 'layout.html'}}
+<script src="{{=URL('static','js/mwlapp.js')}}"></script>
+<div ng-app='mwlapp'>
+<main role="main" class="container" ng-controller="MwlListController">
+  <h2> Modality Worklist </h2>
+  <br>
+    <div class="row">
+    <div class="col">
+    <div class="btn-toolbar" role="toolbar" aria-label="Basic example">
+      <button type="button" class="btn btn-secondary active"><i class="fas fa-clock"></i></button>
+      <button type="button" class="btn btn-secondary"><i class="fas fa-spinner"></i></button>
+      <button type="button" class="btn btn-secondary"><i class="fas fa-check"></i></button>
+    </div>
+  </div>
+
+  <div class="col">
+  <div class="btn-toolbar" role="toolbar" aria-label="Basic example">
+    <button type="button" class="btn btn-secondary">YESTERDAY</button>
+    <button type="button" class="btn btn-secondary active">TODAY</button>
+    <button type="button" class="btn btn-secondary">TOMORROW</button>
+    <button type="button" class="btn btn-secondary">DATE</button>
+  </div>
+</div>
+  <div class="col">
+    <div class="input-group mb-3">
+      <input type="text" class="form-control" placeholder="Search..." aria-label="Recipient's username" aria-describedby="basic-addon2">
+      <div class="input-group-append">
+        <button class="btn btn-outline-secondary" type="button"><span><i class="fas fa-search"></i></span></button>
+      </div>
+    </div>
+  </div>
+</div>
+
+  <br>
+  <div class="row">
+    <a class="btn btn-success btn-lg" href="#"><i class="fa fa-plus"></i></a>
+  </div>
+      <br>
+    <div class="row">
+  <table class="table">
+    <thead>
+<tr>
+  <th scope="col">#</th>
+  <th scope="col">Patient Name</th>
+  <th scope="col">Age</th>
+  <th scope="col">Gender</th>
+  <th scope="col">Scheduled Date</th>
+  <th scope="col">Modality</th>
+  <th scope="col">Status</th>
+  <th scope="col">Procedure</th>
+  <th scope="col">Actions</th>
+</tr>
+</thead>
+<tbody>
+<tr ng-repeat="item in mwlItems" >
+  <th scope="row">{[{$index + 1}]}</th>
+  <td>{[{item.patient_name}]}</td>
+  <td>{[{item.age}]}</td>
+  <td>{[{item.gender}]}</td>
+  <td>{[{item.scheduled_date}]}</td>
+  <td>{[{item.modality}]}</td>
+  <td>{[{item.status}]}</td>
+  <td>{[{item.requestedProcedureDesc}]}</td>
+  <td><span><a class="btn btn-primary" href="#"><i class="fas fa-edit"></i></a>  <a href="#" class="btn btn-danger"><i class="fas fa-trash-alt"></i></a></td>
+</tr>
+</tbody>
+</table>
+  </div>
+  <br>
+  <div class="row">
+    <nav aria-label="Page navigation example">
+<ul class="pagination justify-content-center">
+<li class="page-item disabled">
+  <a class="page-link" href="#" tabindex="-1">Previous</a>
+</li>
+<li class="page-item active"><a class="page-link" href="#">1</a></li>
+<li class="page-item"><a class="page-link" href="#">2</a></li>
+<li class="page-item"><a class="page-link" href="#">3</a></li>
+<li class="page-item">
+  <a class="page-link" href="#">Next</a>
+</li>
+</ul>
+</nav>
+  </div>
+</main>
+</div>
