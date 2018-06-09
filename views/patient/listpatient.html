@@ -10,7 +10,7 @@
     <h3>
         List of patients&nbsp; &nbsp;
         <a href="{{=URL('addpatient')}}">
-          <span class="glyphicon glyphicon-plus"></span>
+          <span class="fas fa-plus"></span>
         </a>
     </h3>
 </div>
@@ -38,8 +38,8 @@
                 <td>{{=patient.created_on}}</td>
                 <td>
                     <span>
-                        <a href="{{=URL('editpatient',vars=({'id':patient.id}))}}"><span class="glyphicon glyphicon-pencil"></span></a>
-                        <a href="{{=URL('deletepatient',vars=({'id':patient.id}))}}"><span class="glyphicon glyphicon-trash"></span></a>
+                        <a href="{{=URL('editpatient',vars=({'id':patient.id}))}}"><span class="fas fa-edit"></span></a>
+                        <a href="{{=URL('deletepatient',vars=({'id':patient.id}))}}"><span class="fas fa-trash"></span></a>
                     </span>
                 </td>
             </tr>
