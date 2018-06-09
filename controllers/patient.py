@@ -74,14 +74,14 @@ def addpatient():
 		db.patient.insert(first_name=first_name, last_name=last_name,
 					birth_date=birth_date, gender=gender,
 					patient_size=patient_size, weight=weight)
-		redirect(URL('index'))
+		redirect(URL('listpatient'))
 	return locals()
 
 def deletepatient():
 	id = request.vars.id
 	patient = db(db.patient.id==id).delete()
 	session.flash = "Deleted successfully!"
-	redirect(URL('index'))
+	redirect(URL('listpatient'))
 	return locals()
 
 def editpatient():
@@ -97,5 +97,5 @@ def editpatient():
 			patient_size=request.vars.patient_size,
 			weight=request.vars.weight,
 			birth_date=request.vars.birth_date)
-		redirect(URL('index'))
-		return locals()	
+		redirect(URL('listpatient'))
+		return locals()
