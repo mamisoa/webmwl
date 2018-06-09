@@ -1,26 +1,35 @@
 {{extend 'layout.html'}}
 <script src="{{=URL('static','js/mwlapp.js')}}"></script>
 <div ng-app='mwlapp'>
-<main role="main" class="container" ng-controller="MwlListController">
+<main role="main" class="container" ng-controller="MwlListController" ng-cloak>
+  <div ng-if="show_list">
   <h2> Modality Worklist </h2>
   <br>
     <div class="row">
     <div class="col">
     <div class="btn-toolbar" role="toolbar" aria-label="Basic example">
-      <button type="button" class="btn btn-secondary active"><i class="fas fa-clock"></i></button>
-      <button type="button" class="btn btn-secondary"><i class="fas fa-spinner"></i></button>
-      <button type="button" class="btn btn-secondary"><i class="fas fa-check"></i></button>
+      <button type="button" class="btn btn-secondary" ng-class="{active: selectedStatus == 'SCHEDULED'}" ng-click="selectScheduled()"><i class="fas fa-clock"></i></button>
+      <button type="button" class="btn btn-secondary" ng-class="{active: selectedStatus == 'IN PROGRESS'}" ng-click="selectInProgress()"><i class="fas fa-spinner"></i></button>
+      <button type="button" class="btn btn-secondary" ng-class="{active: selectedStatus == 'COMPLETED'}" ng-click="selectCompleted()"><i class="fas fa-check"></i></button>
     </div>
   </div>
 
   <div class="col">
   <div class="btn-toolbar" role="toolbar" aria-label="Basic example">
-    <button type="button" class="btn btn-secondary">YESTERDAY</button>
-    <button type="button" class="btn btn-secondary active">TODAY</button>
-    <button type="button" class="btn btn-secondary">TOMORROW</button>
-    <button type="button" class="btn btn-secondary">DATE</button>
+    <button type="button" class="btn btn-secondary" ng-class="{active: selectedDate == 'YESTERDAY'}" ng-click="selectYesterday()">YESTERDAY</button>
+    <button type="button" class="btn btn-secondary" ng-class="{active: selectedDate == 'TODAY'}" ng-click="selectToday()">TODAY</button>
+    <button type="button" class="btn btn-secondary" ng-class="{active: selectedDate == 'TOMORROW'}" ng-click="selectTomorrow()">TOMORROW</button>
+    <button type="button" class="btn btn-secondary" ng-class="{active: selectedDate == 'DATE'}" ng-click="selectADate()" >DATE</button>
   </div>
 </div>
+  <div class="col" ng-if="selectedDate == 'DATE'">
+    <p class="input-group">
+         <input type="text" class="form-control" uib-datepicker-popup="{{format}}" ng-model="selectedFilterDate" is-open="popup1.opened" datepicker-options="dateOptions" ng-required="true" close-text="Close" alt-input-formats="altInputFormats" />
+         <span class="input-group-btn">
+           <button type="button" class="btn btn-default" ng-click="open1()"><i class="fas fa-calendar"></i></button>
+         </span>
+    </p>
+  </div>
   <div class="col">
     <div class="input-group mb-3">
       <input type="text" class="form-control" placeholder="Search..." aria-label="Recipient's username" aria-describedby="basic-addon2">
@@ -30,7 +39,6 @@
     </div>
   </div>
 </div>
-
   <br>
   <div class="row">
     <a class="btn btn-success btn-lg" href="#"><i class="fa fa-plus"></i></a>
@@ -42,6 +50,7 @@
 <tr>
   <th scope="col">#</th>
   <th scope="col">Patient Name</th>
+  <th scope="col">Patient ID</th>
   <th scope="col">Age</th>
   <th scope="col">Gender</th>
   <th scope="col">Scheduled Date</th>
@@ -54,14 +63,15 @@
 <tbody>
 <tr ng-repeat="item in mwlItems" >
   <th scope="row">{[{$index + 1}]}</th>
-  <td>{[{item.patient_name}]}</td>
-  <td>{[{item.age}]}</td>
-  <td>{[{item.gender}]}</td>
-  <td>{[{item.scheduled_date}]}</td>
-  <td>{[{item.modality}]}</td>
-  <td>{[{item.status}]}</td>
-  <td>{[{item.requestedProcedureDesc}]}</td>
-  <td><span><a class="btn btn-primary" href="#"><i class="fas fa-edit"></i></a>  <a href="#" class="btn btn-danger"><i class="fas fa-trash-alt"></i></a></td>
+  <td>{[{item.patient.last_name}]} {[{item.patient.first_name}]}</td>
+  <td>{[{item.patient.patient_id}]}</td>
+  <td>{[{item.patient.age}]}</td>
+  <td>{[{item.patient.gender}]}</td>
+  <td>{[{item.sps.start_date}]}</td>
+  <td>{[{item.sps.modality}]}</td>
+  <td>{[{item.sps.status}]}</td>
+  <td>{[{item.proc_info.requested_proc_desc}]}</td>
+  <td><span><a class="btn btn-primary" href="#" ng-click="editwl($index)"><i class="fas fa-edit"></i></a>  <a href="#" class="btn btn-danger"><i class="fas fa-trash-alt"></i></a></td>
 </tr>
 </tbody>
 </table>
@@ -82,5 +92,22 @@
 </ul>
 </nav>
   </div>
+</div>
+<div ng-if="show_edit">
+    <h2> Edit Worklist </h2>
+    <form>
+      <h4> Patient <h4>
+       <div class="dropdown-divider"></div>
+  <div class="row">
+    <div class="col">
+       <label for="first_name">First Name</label>
+       <input id="first_name" type="text" class="form-control" placeholder="First name">
+    </div>
+    <div class="col">
+      <input type="text" class="form-control" placeholder="Last name">
+    </div>
+  </div>
+</form>
+<div>
 </main>
 </div>

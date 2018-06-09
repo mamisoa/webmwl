@@ -5,10 +5,17 @@
 # -------------------------------------------------------------------------
 
 # ---- example index page ----
+from mwlarcinterface import MwlInterface
 def index():
     response.flash = T("Hello World")
     return dict(message=T('Welcome to web2py!'))
 
+def get_mwl():
+    print(request.vars)
+    mwl = MwlInterface()
+    result = mwl.get_mwl()
+    print(result)
+    return response.json({'result': result})
 # ---- API (example) -----
 @auth.requires_login()
 def api_get_user_email():
@@ -27,7 +34,7 @@ def grid():
 # ---- Embedded wiki (example) ----
 def wiki():
     auth.wikimenu() # add the wiki to the menu
-    return auth.wiki() 
+    return auth.wiki()
 
 # ---- Action for login/register/etc (required for auth) -----
 def user():

@@ -1,0 +1,14 @@
+.glyphicon{
+    display: inline-block;
+    font: normal normal normal 14px/1 FontAwesome;
+    font-size: inherit;
+    text-rendering: auto;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+.glyphicon-chevron-left:before{
+    content:"<"
+}
+.glyphicon-chevron-right:before{
+    content:">"
+}
