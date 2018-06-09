@@ -46,23 +46,12 @@ if not configuration.get('app.production'):
             (T('About'), False, URL(
                 'admin', 'default', 'about/' + _app)),
         ]),
-        ('web2py.com', False, '#', [
-            (T('Download'), False,
-             'http://www.web2py.com/examples/default/download'),
-            (T('Support'), False,
-             'http://www.web2py.com/examples/default/support'),
-            (T('Demo'), False, 'http://web2py.com/demo_admin'),
-            (T('Quick Examples'), False,
-             'http://web2py.com/examples/default/examples'),
-            (T('FAQ'), False, 'http://web2py.com/AlterEgo'),
-            (T('Videos'), False,
-             'http://www.web2py.com/examples/default/videos/'),
-            (T('Free Applications'),
-             False, 'http://web2py.com/appliances'),
-            (T('Plugins'), False, 'http://web2py.com/plugins'),
-            (T('Recipes'), False, 'http://web2pyslices.com/'),
+        ('Patients', False, '#', [
+            (T('Add Patinet'), False,
+             'addpatient'),
+            (T('List Patients'), False, 'listpatient'),
         ]),
-        (T('Documentation'), False, '#', [
+        (T('Modalities'), False, '#', [
             (T('Online book'), False, 'http://www.web2py.com/book'),
             (T('Preface'), False,
              'http://www.web2py.com/book/default/chapter/00'),
