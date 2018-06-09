@@ -1,0 +1,29 @@
+{{extend 'layout.html'}}
+
+<h2>Patient Details</h2>
+
+<form id="form1" enctype="multipart/form-data" method="post" action="{{=URL('addpatient')}}">
+	<div class="form-group col-md-4">
+  		<label for="first_name">First Name:</label>
+  		<input type="text" class="form-control" id="first_name" name="first_name" required placeholder="First Name" value="{{=patient.first_name}}">
+	</div>
+	<div  class="form-group col-md-4">
+		<label for="last_name">Last Name:</label>
+  		<input type="text" class="form-control" id="last_name" required placeholder="Last Name"  name="last_name" value="{{=patient.last_name}}">
+	</div>
+	<div class="form-group col-md-2">
+  		<label for="birth_date">Birth Date:</label>
+  			<input type="date" class="form-control" id="birth_date" name="birth_date" value="{{=patient.birth_date}}">
+	</div>
+	<div class="form-group col-md-2">
+  		<label for="weight">Weight:</label>
+  		<input type="number" class="form-control" id="weight" name="weight" required placeholder="Weight" value="{{=patient.weight}}">
+	</div>
+	<div class="form-group col-md-4">
+		<label for="patient_size">Size:</label>
+  		<input type="text" class="form-control" id="patient_size" name="patient_size" required placeholder="Size" value="{{=patient.patient_size}}">
+	</div>
+	<div class="form-group col-md-6">
+  		<input class="btn btn-primary" type="submit" value="Submit"/>
+  	</div>
+</form>
