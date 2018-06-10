@@ -1,18 +1,18 @@
 {{extend 'layout.html'}}
 <div>
     <h3>
-        List of patients&nbsp; &nbsp;
-        <a href="{{=URL('addpatient')}}">
+        List of Stations&nbsp; &nbsp;
+        <a href="{{=URL('addstation')}}">
           <span class="fas fa-plus"></span>
         </a>
     </h3>
 </div>
 <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet"/>
-<form action="{{=URL('listpatient')}}">
+<form action="{{=URL('liststation')}}">
   <div class="row">
     <div class="col-xs-6 col-md-4">
       <div class="input-group">
-        <input type="text" class="form-control" placeholder="Search by name" id="txtSearch" name="search_str"/>
+        <input type="text" class="form-control" placeholder="Search by station name" id="txtSearch" name="search_str"/>
         <div class="input-group-btn">
           <button class="btn btn-primary" type="submit">
             <span class="glyphicon glyphicon-search"></span>
@@ -26,28 +26,20 @@
 <div class="well">
     <table class='table'>
         <tr>
-            <th>Patient Name</th>
-            <th>Gender</th>
-            <th>Age</th>
-            <th>Weight</th>
-            <th>Size</th>
-            <th>Patient Id</th>
-            <th>Birth Date</th>
+            <th>Station Name</th>
+            <th>AE title</th>
+            <th>Modality</th>
             <th>Options</th>
         </tr>
-        {{for patient in rows:}}
+        {{for station in rows:}}
             <tr>
-                <td>{{=patient.first_name}} {{=patient.last_name}}</td>
-                <td>{{=patient.gender}}</td>
-                <td>{{=patient.age}}</td>
-                <td>{{=patient.weight}}</td>
-                <td>{{=patient.patient_size}}</td>
-                <td>{{=patient.patient_id}}</td>
-                <td>{{=patient.birth_date}}</td>
+                <td>{{=station.name}}</td>
+                <td>{{=station.AE_title}}</td>
+                <td>{{=station.modality}}</td>
                 <td>
                     <span>
-                        <a href="{{=URL('editpatient',vars=({'id':patient.id}))}}"><span class="fas fa-edit"></span></a>
-                        <a href="{{=URL('deletepatient',vars=({'id':patient.id}))}}"><span class="fas fa-trash"></span></a>
+                        <a href="{{=URL('editstation',vars=({'id':station.id}))}}"><span class="fas fa-edit"></span></a>
+                        <a href="{{=URL('deletestation',vars=({'id':station.id}))}}"><span class="fas fa-trash"></span></a>
                     </span>
                 </td>
             </tr>
