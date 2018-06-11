@@ -1,0 +1,26 @@
+{{extend 'layout.html'}}
+
+<h2>Create new Station</h2>
+
+<form id="form1" enctype="multipart/form-data" method="post" action="{{=URL('addstation')}}">
+	<div class="form-group col-md-4">
+  		<b><label for="name">Name:</label></b>
+  		<input type="text" class="form-control" id="name" name="name" required placeholder="Station Name">
+	</div>
+	<div  class="form-group col-md-4">
+		<b><label for="AE_title">AE Title:</label></b>
+  		<input type="text" class="form-control" id="AE_title" required placeholder="AE Title"  name="AE_title">
+	</div>
+	<div class="form-group col-md-3">
+		<b><label for="modality">Modality:</label></b>
+  		<select class="form-control" id="modality" name="modality" required placeholder="Modality">
+  			<option disabled selected value> -- select an option -- </option>
+  			{{for modality in modalities:}}
+  				<option>{{=modality}}</option>
+  			{{pass}}
+  		</select>
+	</div>
+	<div class="form-group col-md-6">
+  		<input class="btn btn-primary" type="submit" value="Submit"/>
+  	</div>
+</form>

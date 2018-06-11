@@ -1,0 +1,52 @@
+{{extend 'layout.html'}}
+
+<h2>Create new procedure</h2>
+
+<link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet"/>
+
+<form id="form1" enctype="multipart/form-data" method="post" action="{{=URL('addprocedure')}}">
+	<div class="form-group col-md-4">
+  		<label for="procedure_id">Procedure ID:</label>
+  		<input type="text" class="form-control" id="procedure_id" name="procedure_id" required placeholder="Procedure Id">
+	</div>
+	<div  class="form-group col-md-4">
+		<label for="procedure_desc">Procedure Description:</label>
+  		<input type="text" class="form-control" id="procedure_desc" required placeholder="Procedure Description" name="procedure_desc">
+	</div>
+	<div class="form-group col-md-2">
+  		<label for="procedure_code">Procedure Code:</label>
+  			<input type="text" class="form-control" id="procedure_code" name="procedure_code" required placeholder="Procedure Code">
+	</div>
+	<div class="form-group col-md-2">
+  		<label for="procedure_code_meaning">Procedure Code Meaning:</label>
+  			<input type="text" class="form-control" id="procedure_code_meaning" name="procedure_code_meaning" required placeholder="Procedure Code Meaning">
+	</div>
+	<div class="form-group col-md-2">
+  		<label for="procedure_code_scheme_designator">Procedure Code Scheme Designator:</label>
+  			<input type="text" class="form-control" id="procedure_code_scheme_designator" name="procedure_code_scheme_designator" required placeholder="Procedure Code Scheme Designator" required>
+	</div>
+	<div class="form-group col-md-3">
+		<label for="modality">Modality:</label>
+  		<select class="form-control" id="modality" name="modality" required placeholder="Modality">
+  			<option disabled selected value> -- select an option -- </option>
+  			{{for modality in modalities:}}
+  				<option>{{=modality}}</option>
+  			{{pass}}
+  		</select>
+	</div>
+	<div class="form-group col-md-2">
+  		<label for="protocol_code">Protocol Code:</label>
+  			<input type="text" class="form-control" id="protocol_code" name="protocol_code" required placeholder="Protocol Code">
+	</div>
+	<div class="form-group col-md-2">
+  		<label for="protocol_code_meaning">Protocol Code Meaning:</label>
+  			<input type="text" class="form-control" id="protocol_code_meaning" name="protocol_code_meaning" required placeholder="Protocol Code Meaning">
+	</div>
+	<div class="form-group col-md-2">
+  		<label for="protocol_code_scheme_designator">Protocol Code Scheme Designator:</label>
+  			<input type="text" class="form-control" id="protocol_code_scheme_designator" name="protocol_code_scheme_designator" required placeholder="Protocol Code Scheme Designator" required>
+	</div>
+	<div class="form-group col-md-6">
+  		<input class="btn btn-primary" type="submit" value="Submit"/>
+  	</div>
+</form>

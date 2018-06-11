@@ -6,4 +6,5 @@ db.define_table('patient',
                Field('gender'),
                Field('weight'),
                Field('patient_size'),
+               Field('patient_id'),
                auth.signature)
