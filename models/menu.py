@@ -48,19 +48,18 @@ if not configuration.get('app.production'):
         ]),
         ('Patients', False, '#', [
             (T('Add Patinet'), False,
-             '/webwml/patient/addpatient'),
-            (T('List Patients'), False, '/webwml/patient/listpatient'),
+             '/webmwl/patient/addpatient'),
+            (T('List Patients'), False, '/webmwl/patient/listpatient'),
         ]),
         (T('Stations'), False, '#', [
             (T('Add Station'), False,
-             '/webwml/station/addstation'),
-            (T('List Stations'), False, '/webwml/station/liststation'),
+             '/webmwl/station/addstation'),
+            (T('List Stations'), False, '/webmwl/station/liststation'),
         ]),
         (T('Procedures'), False, None, [
             (T('Add Procedure'), False,
-             '/webwml/procedure/addprocedure'),
+             '/webmwl/procedure/addprocedure'),
             (T('List Procedures'), False,
-             '/webwml/procedure/listprocedure'),
+             '/webmwl/procedure/listprocedure'),
         ]),
     ]
-
