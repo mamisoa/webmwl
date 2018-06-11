@@ -6,6 +6,8 @@
 
 # ---- example index page ----
 from mwlarcinterface import MwlInterface
+from gluon.contrib import simplejson
+import os
 def index():
     response.flash = T("Hello World")
     return dict(message=T('Welcome to web2py!'))
@@ -16,6 +18,16 @@ def get_mwl():
     result = mwl.get_mwl()
     print(result)
     return response.json({'result': result})
+
+def save_mwl():
+    print(request.vars)
+    worklist = simplejson.loads(request.body.read())
+    print(worklist)
+    mwl = MwlInterface()
+    sample_wl_folder = os.path.join(request.folder, 'modules')
+    result = mwl.create_patient_and_worklist(sample_wl_folder,worklist)
+    return response.json(result)
+
 # ---- API (example) -----
 @auth.requires_login()
 def api_get_user_email():

@@ -18,6 +18,9 @@ mwlapp.controller('MwlListController', ['$scope','$http', function($scope, $http
   $scope.popup1 = {
     opened: false
   }
+  $scope.popup2 = {
+    opened: false
+  }
   $scope.dateOptions = {
     formatYear: 'yyyy',
     startingDay: 1,
@@ -110,8 +113,71 @@ mwlapp.controller('MwlListController', ['$scope','$http', function($scope, $http
   }
   $scope.editwl = function (index) {
     $scope.wl_to_edit = $scope.mwlItems[index]
-    // $scope.show_list = false
-    // $scope.show_edit = true
+    $scope.show_list = false
+    $scope.show_edit = true
+    $scope.title = 'Edit'
+    $scope.action = 'Change'
+  }
+  $scope.addwl = function () {
+    // $scope.wl_to_edit = $scope.mwlItems[index]
+    $scope.initwl()
+    $scope.show_list = false
+    $scope.show_edit = true
+    $scope.title = 'Add'
+    $scope.action = 'Select'
+  }
+  $scope.initwl = function () {
+    $scope.wl_to_edit = {}
+    $scope.wl_to_edit['patient'] = {
+      'last_name': '',
+      'first_name': '',
+      'gender': 'Male',
+      'dob': '',
+      'weight': '',
+      'patient_id': '',
+      'patient_size':''
+      }
+    $scope.wl_to_edit['isr'] = {
+          'accession_number': '',
+          'requesting_physician': '',
+          'referring_physician': ''
+      }
+    $scope.wl_to_edit['sps'] = {
+          'modality': '',
+          'station_aet': '',
+          'station_name': '',
+          'start_date':new Date(),
+          'sps_id': '',
+          'sps_desc':'',
+          'status':'SCHEDULED'
+      }
+    $scope.wl_to_edit['proc_info'] = {
+          'requested_proc_desc': '',
+          'proc_id':'',
+          'study_uid':''
+      }
+  }
+  // Add Edit MwlListController
+  $scope.title = ''
+  $scope.action = ''
+  $scope.open2 = function() {
+    $scope.popup2.opened = true;
+  }
+  $scope.cancel = function() {
+    $scope.show_list = true
+    $scope.show_edit = false
+    $scope.loadMwlItems()
+  }
+  $scope.save = function () {
+    var promise = $http.post('save_mwl',$scope.wl_to_edit)
+    promise.then ( function(result) {
+      console.log('Saved Successfully')
+      $scope.cancel()
+    })
+    .catch ( function(error) {
+      console.log('Error in Saving MWL ' + error)
+      $scope.cancel()
+    })
   }
   // Initial load
   $scope.loadMwlItems()

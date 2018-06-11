@@ -1,14 +1,28 @@
+@@font-face {
+  font-family:'FontAwesome';
+  src: url('/static/webfonts/fa-solid-900.woff2');
+}
 .glyphicon{
-    display: inline-block;
-    font: normal normal normal 14px/1 FontAwesome;
-    font-size: inherit;
-    text-rendering: auto;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-font-smoothing: antialiased;
+  display: inline-block;
+  font-family:'FontAwesome';
+  font-style: normal;
+  font-variant: normal;
+  text-rendering: auto;
+  line-height: 1
 }
 .glyphicon-chevron-left:before{
     content:"<"
 }
 .glyphicon-chevron-right:before{
     content:">"
+}
+
+.glyphicon-chevron-up::before{
+    font-family:'FontAwesome';
+    content:"\f0de";
+}
+.glyphicon-chevron-down:before{
+    content:"v"
 }
