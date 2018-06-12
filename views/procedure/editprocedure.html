@@ -1,52 +1,66 @@
 {{extend 'layout.html'}}
-
-<h2>Edit Procedure Details</h2>
-
-<link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet"/>
-
-<form id="form1" enctype="multipart/form-data" method="post" action="{{=URL('editprocedure',args=(id))}}">
-	<div class="form-group col-md-4">
-  		<label for="procedure_id">Procedure ID:</label>
-  		<input type="text" class="form-control" id="procedure_id" name="procedure_id" required placeholder="Procedure Id" value="{{=procedure.procedure_id}}">
-	</div>
-	<div  class="form-group col-md-4">
-		<label for="procedure_desc">Procedure Description:</label>
-  		<input type="text" class="form-control" id="procedure_desc" required placeholder="Procedure Description" name="procedure_desc" value="{{=procedure.procedure_description}}">
-	</div>
-	<div class="form-group col-md-2">
-  		<label for="procedure_code">Procedure Code:</label>
-  			<input type="text" class="form-control" id="procedure_code" name="procedure_code" required placeholder="Procedure Code" value="{{=procedure.procedure_code}}">
-	</div>
-	<div class="form-group col-md-2">
-  		<label for="procedure_code_meaning">Procedure Code Meaning:</label>
-  			<input type="text" class="form-control" id="procedure_code_meaning" name="procedure_code_meaning" required placeholder="Procedure Code Meaning" value="{{=procedure.procedure_code_meaning}}">
-	</div>
-	<div class="form-group col-md-2">
-  		<label for="procedure_code_scheme_designator">Procedure Code Scheme Designator:</label>
-  			<input type="text" class="form-control" id="procedure_code_scheme_designator" name="procedure_code_scheme_designator" required placeholder="Procedure Code Scheme Designator" required value="{{=procedure.procedure_code_scheme_designator}}">
-	</div>
-	<div class="form-group col-md-3">
-		<label for="modality">Modality:</label>
-  		<select class="form-control" id="modality" name="modality" required placeholder="Modality" value="{{=procedure.modality}}">
-  			<option disabled selected value> -- select an option -- </option>
-  			{{for modality in modalities:}}
-  				<option>{{=modality}}</option>
-  			{{pass}}
-  		</select>
-	</div>
-	<div class="form-group col-md-2">
-  		<label for="protocol_code">Protocol Code:</label>
-  			<input type="text" class="form-control" id="protocol_code" name="protocol_code" required placeholder="Protocol Code" value="{{=procedure.protocol_code}}">
-	</div>
-	<div class="form-group col-md-2">
-  		<label for="protocol_code_meaning">Protocol Code Meaning:</label>
-  			<input type="text" class="form-control" id="protocol_code_meaning" name="protocol_code_meaning" required placeholder="Protocol Code Meaning" value="{{=procedure.protocol_code_meaning}}">
-	</div>
-	<div class="form-group col-md-2">
-  		<label for="protocol_code_scheme_designator">Protocol Code Scheme Designator:</label>
-  			<input type="text" class="form-control" id="protocol_code_scheme_designator" name="protocol_code_scheme_designator" required placeholder="Protocol Code Scheme Designator" required value="{{=procedure.protocol_code_scheme_designator}}">
-	</div>
-	<div class="form-group col-md-6">
-  		<input class="btn btn-primary" type="submit" value="Submit"/>
-  	</div>
+<script src="{{=URL('static','js/mwlapp.js')}}"></script>
+<form id="form1" enctype="multipart/form-data" method="post" action="{{=URL('editprocedure', args=(id))}}">
+    <div class="p-3 mb-2 bg-light text-dark">
+        <h4> Edit Procedure</h4>
+        <div class="dropdown-divider"></div>
+        <div class="row">
+            <div class="col">
+                <label for="procedure_id"><h6><i class="fa fa-id-badge"></i> Procedure Id </h6></label>
+                <input type="text" class="form-control" id="procedure_id" name="procedure_id" required placeholder="Procedure Id" value="{{=procedure.procedure_id}}">
+            </div>
+            <div  class="col">
+              <label for="procedure_desc"><h6><i class="fa fa-font"></i> Procedure Description </h6></label>
+                <input type="text" class="form-control" id="procedure_desc" required placeholder="Procedure Description" name="procedure_desc" value="{{=procedure.procedure_description}}">
+            </div>
+        </div>
+        <br>
+        <div class="row">
+            <div class="col">
+                <label for="procedure_code"><h6><i class="fa fa-barcode"></i> Procedure Code </h6></label>
+                  <input type="text" class="form-control" id="procedure_code" name="procedure_code" required placeholder="Procedure Code" value="{{=procedure.procedure_code}}">
+            </div>
+            <div class="col">
+                <label for="procedure_code_meaning"><h6><i class="fa fa-book"></i> Procedure Code Meaning </h6></label>
+                  <input type="text" class="form-control" id="procedure_code_meaning" name="procedure_code_meaning" required placeholder="Procedure Code Meaning" value="{{=procedure.procedure_code_meaning}}">
+            </div>
+        </div>
+        <br>
+        <div class="row">
+            <div class="col">
+                <label for="procedure_code_scheme_designator"><h6><i class="fa fa-certificate"></i> Procedure Code Scheme Designator </h6></label>
+                  <input type="text" class="form-control" id="procedure_code_scheme_designator" name="procedure_code_scheme_designator" required placeholder="Procedure Code Scheme Designator" required value="{{=procedure.procedure_code_scheme_designator}}">
+            </div>
+            <div class="col">
+              <label for="modality"><h6><i class="fa fa-x-ray"></i> Modality </h6></label>
+                <select class="form-control" id="modality" name="modality" required placeholder="Modality">
+                  <option disabled selected value> -- select an option -- </option>
+                  {{for modality in modalities:}}
+                    <option>{{=modality}}</option>
+                  {{pass}}
+                </select>
+            </div>
+        </div>
+        <br>
+        <div class="row">
+            <div class="col">
+                <label for="protocol_code"><h6><i class="fa fa-barcode"></i> Protocol Code </h6></label>
+                  <input type="text" class="form-control" id="protocol_code" name="protocol_code" required placeholder="Protocol Code" required value="{{=procedure.protocol_code}}">
+            </div>
+            <div class="col">
+                <label for="protocol_code_meaning"><h6><i class="fa fa-book"></i> Protocol Code Meaning</h6></label>
+                  <input type="text" class="form-control" id="protocol_code_meaning" name="protocol_code_meaning" required placeholder="Protocol Code Meaning" value="{{=procedure.protocol_code_meaning}}">
+            </div>
+            <div class="col">
+                <label for="protocol_code_scheme_designator"><h6><i class="fa fa-certificate"></i> Protocol Code Scheme Designator</h6></label>
+                  <input type="text" class="form-control" id="protocol_code_scheme_designator" name="protocol_code_scheme_designator" required placeholder="Protocol Code Scheme Designator" required value="{{=procedure.protocol_code_scheme_designator}}">
+            </div>
+        </div>
+        <br>
+        <div class="row">
+            <div class="col">
+            <input class="btn btn-primary" type="submit" value="Save" />
+            <a href="{{=URL('listprocedure')}}" class="btn btn-danger">Cancel</a>
+        </div>
+    </div>
 </form>

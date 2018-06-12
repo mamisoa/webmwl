@@ -1,35 +1,52 @@
 {{extend 'layout.html'}}
-
-<h2>Edit Patient Details</h2>
-
-<link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet"/>
-
-<form id="form1" enctype="multipart/form-data" method="post" action="{{=URL('editpatient',args=(id))}}">
-	<div class="form-group col-md-4">
-  		<label for="first_name">First Name:</label>
-  		<input type="text" class="form-control" id="first_name" name="first_name" required placeholder="First Name" value="{{=patient.first_name}}">
-	</div>
-	<div  class="form-group col-md-4">
-		<label for="last_name">Last Name:</label>
-  		<input type="text" class="form-control" id="last_name" required placeholder="Last Name"  name="last_name" value="{{=patient.last_name}}">
-	</div>
-	<div class="form-group col-md-2">
-  		<label for="birth_date">Birth Date:</label>
-  			<input type="date" class="form-control" id="birth_date" name="birth_date" value="{{=patient.birth_date}}">
-	</div>
-	<div class="form-group col-md-2">
-  		<label for="weight">Weight:</label>
-  		<input type="number" class="form-control" id="weight" name="weight" required placeholder="Weight" value="{{=patient.weight}}">
-	</div>
-	<div class="form-group col-md-4">
-		<label for="patient_size">Size:</label>
-  		<input type="text" class="form-control" id="patient_size" name="patient_size" required placeholder="Size" value="{{=patient.patient_size}}">
-	</div>
-	<div class="form-group col-md-2">
-  		<label for="patient_id">Patient Id:</label>
-  			<input type="text" class="form-control" id="patient_id" name="patient_id" placeholder="Id" value="{{=patient.patient_id}}" readonly>
-	</div>
-	<div class="form-group col-md-6">
-  		<input class="btn btn-primary" type="submit" value="Submit"/>
-  	</div>
+<script src="{{=URL('static','js/mwlapp.js')}}"></script>
+<form id="form1" enctype="multipart/form-data" method="post" action="{{=URL('editpatient', args=(id))}}">
+	<div class="p-3 mb-2 bg-light text-dark">
+		<h4> Edit Patient</h4>
+	    <div class="dropdown-divider"></div>
+	    <br>
+	    <div class="row">
+			<div class="col">
+		  		<label for="first_name"><h6><i class="fa fa-user"></i> First Name </h6></label>
+		  		<input type="text" class="form-control" id="first_name" name="first_name" required placeholder="First Name" value="{{=patient.first_name}}">
+			</div>
+			<div  class="col">
+				<label for="last_name"><h6><i class="fa fa-user"></i> Last Name </h6></label>
+		  		<input type="text" class="form-control" id="last_name" required placeholder="Last Name"  name="last_name" value="{{=patient.last_name}}">
+			</div>
+		</div>
+		<div class="row">
+			<div class="col">
+		  		<label for="patient_id"><h6><i class="fa fa-id-badge"></i> Patient Id </h6></label>
+		  		<input type="text" class="form-control" id="patient_id" name="patient_id" required placeholder="Patient Id" value="{{=patient.patient_id}}">
+			</div>
+			<div  class="col">
+				<label for="gender"><h6><i class="fa fa-male"></i><i class="fa fa-female"></i> Gender</h6></label>
+		  		<br>
+		   		<label class="radio-inline"><input type="radio" name="gender" value="Male" checked><h6>Male</h6></label>
+		 		<label class="radio-inline"><input type="radio" name="gender" value="Female"><h6>Female</h6></label>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col">
+		  		<label for="birth_date"><h6><i class="fa fa-calendar-alt"></i> Date of Birth</h6></label>
+		  		<input type="date" class="form-control" id="birth_date" name="birth_date" value="{{=patient.birth_date}}">
+			</div>
+			<div class="col">
+		  		<label for="weight"><h6><i class="fa fa-weight"></i> Weight</h6></label>
+		  		<input type="number" class="form-control" id="weight" name="weight" required placeholder="Weight" value="{{=patient.weight}}">
+			</div>
+			<div class="col">
+				<label for="first_name"><h6><i class="fa fa-tape"></i> Size</h6></label>
+		  		<input type="text" class="form-control" id="patient_size" name="patient_size" required placeholder="Size" value="{{=patient.patient_size}}">
+			</div>
+		</div>
+		<br>
+		<div class="row">
+			<div class="col">
+	  			<input class="btn btn-primary" type="submit" value="Save"/>
+	  			<a href="{{=URL('listpatient')}}" class="btn btn-danger">Cancel</a>
+	  		</div>
+	  	</div>
+	 </div>
 </form>

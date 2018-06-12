@@ -1,26 +1,22 @@
 {{extend 'layout.html'}}
+<script src="{{=URL('static','js/mwlapp.js')}}"></script>
 <div>
     <h3>
         List of Stations&nbsp; &nbsp;
-        <a href="{{=URL('addstation')}}">
-          <span class="fas fa-plus"></span>
+        <a href="{{=URL('addstation')}}" class="btn btn-success btn-md">
+          <span class="fa fa-plus"></span>
         </a>
     </h3>
 </div>
-<link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet"/>
 <form action="{{=URL('liststation')}}">
-  <div class="row">
-    <div class="col-xs-6 col-md-4">
-      <div class="input-group">
-        <input type="text" class="form-control" placeholder="Search by station name" id="txtSearch" name="search_str"/>
-        <div class="input-group-btn">
-          <button class="btn btn-primary" type="submit">
-            <span class="glyphicon glyphicon-search"></span>
-          </button>
+    <div class="col">
+        <div class="input-group mb-3">
+            <input type="text" class="form-control" placeholder="Search by station name" id="txtSearch" name="search_str"/>
+            <div class="input-group-append">
+                <button class="btn btn-outline-secondary" type="submit"><span><i class="fas fa-search"></i></span></button>
+            </div>
         </div>
       </div>
-    </div>
-  </div>
 </form>
 <br>
 <div class="well">

@@ -1,41 +1,50 @@
 {{extend 'layout.html'}}
-
-<h2>Create new patient</h2>
-
-<link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet"/>
-
+<script src="{{=URL('static','js/mwlapp.js')}}"></script>
 <form id="form1" enctype="multipart/form-data" method="post" action="{{=URL('addpatient')}}">
-	<div class="form-group col-md-4">
-  		<label for="first_name">First Name:</label>
-  		<input type="text" class="form-control" id="first_name" name="first_name" required placeholder="First Name">
-	</div>
-	<div  class="form-group col-md-4">
-		<label for="last_name">Last Name:</label>
-  		<input type="text" class="form-control" id="last_name" required placeholder="Last Name"  name="last_name">
-	</div>
-	<div class="form-group col-md-2">
-  		<label for="birth_date">Birth Date:</label>
-  			<input type="date" class="form-control" id="birth_date" name="birth_date">
-	</div>
-	<div class="form-group col-md-2">
-  		<label for="patient_id">Patient Id:</label>
-  			<input type="text" class="form-control" id="patient_id" name="patient_id" placeholder="Id">
-	</div>
-	<div class="form-group col-md-4">
-  		<label for="gender">Gender:</label>
-  		<br>
-  		<label class="radio-inline"><input type="radio" name="gender" value="Male" checked>Male</label>
-		<label class="radio-inline"><input type="radio" name="gender" value="Female">Female</label>
-	</div>	
-	<div class="form-group col-md-2">
-  		<label for="weight">Weight:</label>
-  		<input type="number" class="form-control" id="weight" name="weight" required placeholder="Weight">
-	</div>
-	<div class="form-group col-md-4">
-		<label for="patient_size">Size:</label>
-  		<input type="text" class="form-control" id="patient_size" name="patient_size" required placeholder="Size">
-	</div>
-	<div class="form-group col-md-6">
-  		<input class="btn btn-primary" type="submit" value="Submit"/>
-  	</div>
+	<div class="p-3 mb-2 bg-light text-dark">
+		<h4> Add new Patient</h4>
+	    <div class="dropdown-divider"></div>
+	    <div class="row">
+			<div class="col">
+		  		<label for="first_name"><h6><i class="fa fa-user"></i> First Name </h6></label>
+		  		<input type="text" class="form-control" id="first_name" name="first_name" required placeholder="First Name">
+			</div>
+			<div  class="col">
+				<label for="last_name"><h6><i class="fa fa-user"></i> Last Name </h6></label>
+		  		<input type="text" class="form-control" id="last_name" required placeholder="Last Name"  name="last_name">
+			</div>
+		</div>
+		<div class="row">
+			<div class="col">
+		  		<label for="patient_id"><h6><i class="fa fa-id-badge"></i> Patient Id </h6></label>
+		  		<input type="text" class="form-control" id="patient_id" name="patient_id" required placeholder="Patient Id">
+			</div>
+			<div  class="col">
+				<label for="gender"><h6><i class="fa fa-male"></i><i class="fa fa-female"></i> Gender</h6></label>
+		  		<br>
+		   		<label class="radio-inline"><input type="radio" name="gender" value="Male" checked><h6>Male</h6></label>
+		 		<label class="radio-inline"><input type="radio" name="gender" value="Female"><h6>Female</h6></label>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col">
+		  		<label for="birth_date"><h6><i class="fa fa-calendar-alt"></i> Date of Birth</h6></label>
+		  		<input type="date" class="form-control" id="birth_date" name="birth_date">
+			</div>
+			<div class="col">
+		  		<label for="weight"><h6><i class="fa fa-weight"></i> Weight</h6></label>
+		  		<input type="number" class="form-control" id="weight" name="weight" required placeholder="Weight">
+			</div>
+			<div class="col">
+				<label for="first_name"><h6><i class="fa fa-tape"></i> Size</h6></label>
+		  		<input type="text" class="form-control" id="patient_size" name="patient_size" required placeholder="Size">
+			</div>
+		</div>
+		<br>
+		<div class="row">
+			<div class="col">
+	  			<input class="btn btn-primary" type="submit" value="Add Patient"/>
+	  		</div>
+	  	</div>
+	 </div>
 </form>

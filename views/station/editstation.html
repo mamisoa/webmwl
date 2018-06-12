@@ -1,28 +1,35 @@
 {{extend 'layout.html'}}
-
-<h2>Edit Station Details</h2>
-
-<link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet"/>
-
-<form id="form1" enctype="multipart/form-data" method="post" action="{{=URL('editstation',args=(id))}}">
-	<div class="form-group col-md-4">
-  		<label for="name">Station Name:</label>
-  		<input type="text" class="form-control" id="name" name="name" required placeholder="Station Name" value="{{=station.name}}">
-	</div>
-	<div  class="form-group col-md-4">
-		<label for="AE_title">AE Title:</label>
-  		<input type="text" class="form-control" id="AE_title" required placeholder="AE Title"  name="AE_title" value="{{=station.AE_title}}">
-	</div>
-	<div class="form-group col-md-3">
-		<b><label for="modality">Modality:</label></b>
-  		<select class="form-control" id="modality" name="modality" required placeholder="Modality" value="{{=station.modality}}">
-  			<option disabled selected value> -- select an option -- </option>
-  			{{for modality in modalities:}}
-  				<option>{{=modality}}</option>
-  			{{pass}}
-  		</select>
-	</div>
-	<div class="form-group col-md-6">
-  		<input class="btn btn-primary" type="submit" value="Submit"/>
-  	</div>
+<script src="{{=URL('static','js/mwlapp.js')}}"></script>
+<form id="form1" enctype="multipart/form-data" method="post" action="{{=URL('editstation', args=(id))}}">
+    <div class="p-3 mb-2 bg-light text-dark">
+        <h4> Edit Station</h4>
+        <div class="dropdown-divider"></div>
+        <br>
+        <div class="row">
+            <div class="col">
+                <label for="first_name"><h6><i class="fa fa-hospital" ></i> Station Name</h6></label>
+                <input type="text" class="form-control" id="name" name="name" required placeholder="Station Name" value="{{=station.name}}">
+            </div>
+            <div class="col">
+                <label for="AE_title"><h6><i class="fa fa-heading" ></i> AE Title</h6></label>
+                <input type="text" class="form-control" id="AE_title" name="AE_title" required placeholder="AE Title" value="{{=station.AE_title}}">
+            </div>
+            <div class="col">
+                <label for="modality"><h6><i class="fa fa-x-ray" ></i> Modality</h6></label>
+                <select class="form-control" id="modality" name="modality" required placeholder="Modality">
+                    <option disabled selected value> -- select an option -- </option>
+                    {{for modality in modalities:}}
+                        <option>{{=modality}}</option>
+                    {{pass}}
+                </select>
+            </div>
+        </div>
+        <br>
+        <div class="row">
+            <div class="col">
+                <input class="btn btn-primary" type="submit" value="Save"/>
+                <a href="{{=URL('liststation')}}" class="btn btn-danger">Cancel</a>
+            </div>
+        </div>
+    </div>
 </form>
