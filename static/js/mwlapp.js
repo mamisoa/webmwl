@@ -30,6 +30,14 @@ mwlapp.controller('MwlListController', ['$scope','$http', function($scope, $http
   $scope.pageSize = 10
 
   $scope.mwlItems = []
+
+  $scope.selected_station = undefined
+  $scope.stations = []
+  $scope.selected_procedure = undefined
+  $scope.procedures = []
+  $scope.selected_patient = undefined
+  $scope.patients = []
+
   $scope.today = function () {
       var date = new Date()
       return date
@@ -179,6 +187,39 @@ mwlapp.controller('MwlListController', ['$scope','$http', function($scope, $http
       $scope.cancel()
     })
   }
+  $scope.loadStations = function() {
+    var promise = $http.get('default/get_stations')
+    promise.then (function (response) {
+      $scope.stations.length = 0
+      $scope.stations.push.apply($scope.stations,response.data['result'])
+    })
+    .catch( function(error) {
+      console.log('Error ='+ error)
+    })
+  }
+  $scope.loadProcedures = function() {
+    var promise = $http.get('default/get_procedures')
+    promise.then (function (response) {
+      $scope.procedures.length = 0
+      $scope.procedures.push.apply($scope.procedures,response.data['result'])
+    })
+    .catch( function(error) {
+      console.log('Error ='+ error)
+    })
+  }
+  $scope.loadPatients = function() {
+    var promise = $http.get('default/get_patients')
+    promise.then (function (response) {
+      $scope.patients.length = 0
+      $scope.patients.push.apply($scope.patients,response.data['result'])
+    })
+    .catch( function(error) {
+      console.log('Error ='+ error)
+    })
+  }
   // Initial load
   $scope.loadMwlItems()
+  $scope.loadStations()
+  $scope.loadProcedures()
+  $scope.loadPatients()
 }])

@@ -8,6 +8,7 @@
 from mwlarcinterface import MwlInterface
 from gluon.contrib import simplejson
 import os
+
 def index():
     response.flash = T("Hello World")
     return dict(message=T('Welcome to web2py!'))
@@ -27,6 +28,18 @@ def save_mwl():
     sample_wl_folder = os.path.join(request.folder, 'modules')
     result = mwl.create_patient_and_worklist(sample_wl_folder,worklist)
     return response.json(result)
+
+def get_stations():
+    rows = db(db.station).select(orderby=db.station.created_on)
+    return response.json({'result': rows})
+
+def get_procedures():
+    rows = db(db.imaging_procedure).select(orderby=db.imaging_procedure.created_on)
+    return response.json({'result': rows})
+
+def get_patients():
+    rows = db(db.patient).select(orderby=db.patient.created_on)
+    return response.json({'result': rows})
 
 # ---- API (example) -----
 @auth.requires_login()
