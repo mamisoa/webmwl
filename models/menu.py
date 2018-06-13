@@ -62,4 +62,9 @@ if not configuration.get('app.production'):
             (T('List Procedures'), False,
              '/webmwl/procedure/listprocedure'),
         ]),
+        (T('Arc Config'), False, None, [
+            (T('Arc Config'), False,
+             '/webmwl/arcconfig/listarcconfig'),
+        ]),
     ]
+

@@ -1,0 +1,30 @@
+{{extend 'layout.html'}}
+<script src="{{=URL('static','js/mwlapp.js')}}"></script>
+<form id="form1" enctype="multipart/form-data" method="post" action="{{=URL('editarcconfig', args=(id))}}">
+    <div class="p-3 mb-2 bg-light text-dark">
+        <h4 align="center"> Edit Achive Configuration</h4>
+        <div class="dropdown-divider"></div>
+        <br>
+        <div class="row">
+            <div class="col">
+                <label for="arc_hostname"><h6><i class="fa fa-laptop" ></i>Archive Ip/Hostname</h6></label>
+                <input type="text" class="form-control" id="arc_hostname" name="arc_hostname" required placeholder="Archive Ip/Hostname" value="{{=arc_config.arc_hostname}}">
+            </div>
+            <div class="col">
+                <label for="arc_port"><h6><i class="fa fa-toggle-on" ></i>Archive Port</h6></label>
+                <input type="text" class="form-control" id="arc_port" name="arc_port" required placeholder="Archive Port" value="{{=arc_config.arc_port}}">
+            </div>
+            <div class="col">
+                <label for="arc_ae_title"><h6><i class="fa fa-heading" ></i>Archive AE Title</h6></label>
+                <input type="text" class="form-control" id="arc_ae_title" name="arc_ae_title" required placeholder="Archive AE Title" value="{{=arc_config.arc_ae_title}}">
+            </div>
+        </div>
+        <br>
+        <div class="row">
+            <div class="col">
+                <input class="btn btn-primary" type="submit" value="Save"/>
+                <a href="{{=URL('listarcconfig')}}" class="btn btn-danger">Cancel</a>
+            </div>
+        </div>
+    </div>
+</form>

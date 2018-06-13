@@ -1,0 +1,29 @@
+{{extend 'layout.html'}}
+<script src="{{=URL('static','js/mwlapp.js')}}"></script>
+<h4 align="center"> Archive Configuration</h4>
+
+<br>
+<div>
+    <div class="well">
+        <table class='table'>
+            <tr>
+                <th>Archive Ip/Hostname</th>
+                <th>Archive Port</th>
+                <th>Arc AE Title</th>
+                <th>Edit configuration</th>
+            </tr>
+            {{for conf in rows:}}
+                <tr>
+                    <td>{{=conf.arc_hostname}}</td>
+                    <td>{{=conf.arc_port}}</td>
+                    <td>{{=conf.arc_ae_title}}</td>
+                    <td>
+                        <span>
+                            <a href="{{=URL('editarcconfig',vars=({'id':conf.id}))}}"><span class="fas fa-edit"></span></a>
+                        </span>
+                    </td>
+                </tr>
+            {{pass}}
+        </table>
+    </div>
+</div>

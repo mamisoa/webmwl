@@ -188,7 +188,7 @@ mwlapp.controller('MwlListController', ['$scope','$http', function($scope, $http
     })
   }
   $scope.loadStations = function() {
-    var promise = $http.get('default/get_stations')
+    var promise = $http.get('get_stations')
     promise.then (function (response) {
       $scope.stations.length = 0
       $scope.stations.push.apply($scope.stations,response.data['result'])
@@ -198,7 +198,7 @@ mwlapp.controller('MwlListController', ['$scope','$http', function($scope, $http
     })
   }
   $scope.loadProcedures = function() {
-    var promise = $http.get('default/get_procedures')
+    var promise = $http.get('get_procedures')
     promise.then (function (response) {
       $scope.procedures.length = 0
       $scope.procedures.push.apply($scope.procedures,response.data['result'])
@@ -208,7 +208,7 @@ mwlapp.controller('MwlListController', ['$scope','$http', function($scope, $http
     })
   }
   $scope.loadPatients = function() {
-    var promise = $http.get('default/get_patients')
+    var promise = $http.get('get_patients')
     promise.then (function (response) {
       $scope.patients.length = 0
       $scope.patients.push.apply($scope.patients,response.data['result'])
