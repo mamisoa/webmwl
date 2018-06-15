@@ -32,11 +32,8 @@ mwlapp.controller('MwlListController', ['$scope','$http', function($scope, $http
   $scope.mwlItems = []
 
   $scope.selected_station = undefined
-  $scope.stations = []
   $scope.selected_procedure = undefined
-  $scope.procedures = []
   $scope.selected_patient = undefined
-  $scope.patients = []
 
   $scope.today = function () {
       var date = new Date()
@@ -187,31 +184,40 @@ mwlapp.controller('MwlListController', ['$scope','$http', function($scope, $http
       $scope.cancel()
     })
   }
-  $scope.loadStations = function() {
-    var promise = $http.get('get_stations')
+  $scope.loadStations = function(search_str) {
+    $scope.stations = []
+    var qparams = {params: {'search_str': search_str}}
+    var promise = $http.get('get_stations', qparams)
     promise.then (function (response) {
       $scope.stations.length = 0
       $scope.stations.push.apply($scope.stations,response.data['result'])
+      return $scope.stations
     })
     .catch( function(error) {
       console.log('Error ='+ error)
     })
   }
-  $scope.loadProcedures = function() {
-    var promise = $http.get('get_procedures')
+  $scope.loadProcedures = function(search_str) {
+    $scope.procedures = []
+    var qparams = {params: {'search_str': search_str}}
+    var promise = $http.get('get_procedures', qparams)
     promise.then (function (response) {
       $scope.procedures.length = 0
       $scope.procedures.push.apply($scope.procedures,response.data['result'])
+      return $scope.procedures
     })
     .catch( function(error) {
       console.log('Error ='+ error)
     })
   }
-  $scope.loadPatients = function() {
-    var promise = $http.get('get_patients')
+  $scope.loadPatients = function(search_str) {
+    $scope.patients = []
+    var qparams = {params: {'search_str': search_str}}
+    var promise = $http.get('get_patients',qparams)
     promise.then (function (response) {
       $scope.patients.length = 0
       $scope.patients.push.apply($scope.patients,response.data['result'])
+      return $scope.patients
     })
     .catch( function(error) {
       console.log('Error ='+ error)
@@ -219,7 +225,7 @@ mwlapp.controller('MwlListController', ['$scope','$http', function($scope, $http
   }
   // Initial load
   $scope.loadMwlItems()
-  $scope.loadStations()
-  $scope.loadProcedures()
-  $scope.loadPatients()
+  //$scope.loadStations()
+  //$scope.loadProcedures()
+  //$scope.loadPatients()
 }])

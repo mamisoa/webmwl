@@ -30,16 +30,29 @@ def save_mwl():
     return response.json(result)
 
 def get_stations():
-    rows = db(db.station).select(orderby=db.station.created_on)
+    if request.vars.search_str:
+        search_str = request.vars.search_str
+        rows = db(db.station.name.contains(search_str)).select(orderby=db.station.created_on)
+    else:
+        rows = db(db.station).select(orderby=db.station.created_on)
     return response.json({'result': rows})
 
 def get_procedures():
-    rows = db(db.imaging_procedure).select(orderby=db.imaging_procedure.created_on)
+    if request.vars.search_str:
+        search_str = request.vars.search_str
+        rows = db(db.imaging_procedure.procedure_id.contains(search_str)).select(orderby=~db.imaging_procedure.created_on)
+    else:
+        rows = db(db.imaging_procedure).select(orderby=db.imaging_procedure.created_on)
     return response.json({'result': rows})
 
 def get_patients():
-    rows = db(db.patient).select(orderby=db.patient.created_on)
-    return response.json({'result': rows})
+    if request.vars.search_str:
+        search_str = request.vars.search_str
+        rows = db(db.patient.first_name.contains(search_str) | 
+            db.patient.last_name.contains(search_str)).select(orderby=~db.patient.created_on)
+    else:
+        rows = db(db.patient).select(orderby=db.patient.created_on)
+    return response.json({"result":rows})
 
 # ---- API (example) -----
 @auth.requires_login()

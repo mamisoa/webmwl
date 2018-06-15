@@ -144,8 +144,9 @@
   </div>
   <br>
   <div class="row">
+
     <div class="col">
-      <input placeholder="Type patient name to select Patient" type="text" ng-model="selected_patient" uib-typeahead="patient.first_name +patient.last_name for patient in patients | filter:$viewValue | limitTo:8" class="form-control"/>
+      <input placeholder="Type patient name to select Patient" type="text" ng-model="selected_patient" uib-typeahead="patient.first_name +patient.last_name for patient in loadPatients($viewValue) | filter:$viewValue | limitTo:8" class="form-control" typeahead-no-results="noResults" typeahead-loading="loadingPatients"/>
     </div>
   <div class="col">
     <a href="#" class="btn btn-primary">{[{action}]} Patient</a>
@@ -208,7 +209,7 @@
 <br>
 <div class="row">
   <div class="col">
-      <input placeholder="Type station name to select Station" type="text" ng-model="selected_station" uib-typeahead="station.name for station in stations | filter:$viewValue | limitTo:8" class="form-control"/>
+      <input placeholder="Type station name to select Station" type="text" ng-model="selected_station" uib-typeahead="station.name for station in loadStations($viewValue) | filter:$viewValue | limitTo:8" class="form-control" typeahead-no-results="noResults" typeahead-loading="loadingStations"/>
   </div>
   <div class="col">
     <a href="#" class="btn btn-primary" data-toggle="modal" data-target="#stationModal">{[{action}]} Station</a>
@@ -223,7 +224,7 @@
   <div class="col-sm-6">
   <label for="first_name"><h6><i class="fa fa-procedures"></i> Requested Procedure</h6></label>
   <!--<input type="text" class="form-control" ng-model="wl_to_edit.proc_info.requested_proc_desc" placeholder="Procudure">-->
-  <input placeholder="Type procedure_id to select Procudure" type="text" ng-model="selected_procedure" uib-typeahead="procedure.procedure_id for procedure in procedures | filter:$viewValue | limitTo:8" class="form-control"/>
+  <input placeholder="Type procedure_id to select Procudure" type="text" ng-model="selected_procedure" uib-typeahead="procedure.procedure_id for procedure in loadProcedures($viewValue) | filter:$viewValue | limitTo:8" class="form-control" typeahead-no-results="noResults" typeahead-loading="loadingProcedures"/>
   </div>
 </div>
   <br>
