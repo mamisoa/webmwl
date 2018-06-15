@@ -10,16 +10,21 @@ def listprocedure():
 	stop = page*Items_Per_Page
 	start = stop - Items_Per_Page
 	total_entries = len(db(db.imaging_procedure).select())
+	search_str = request.vars.search_str
+	if request.vars.search_str:
+		search_str = request.vars.search_str
+		rows = db(db.imaging_procedure.procedure_id.contains(search_str) |
+				db.imaging_procedure.procedure_description.contains(search_str) |
+				db.imaging_procedure.modality.contains(search_str)).select(orderby=~db.imaging_procedure.created_on,limitby=(start,stop))
+		total_entries = len(rows)
+	else:
+		rows = db(db.imaging_procedure).select(orderby=db.imaging_procedure.created_on,limitby=(start,stop))
 	if total_entries % Items_Per_Page > 0:
 		total_entries = (total_entries / Items_Per_Page) + 1
 	else:
 		total_entries = (total_entries / Items_Per_Page)
-	search_str = request.vars.search_str
-	if request.vars.search_str:
-		search_str = request.vars.search_str
-		rows = db(db.imaging_procedure.procedure_id.contains(search_str)).select(orderby=~db.imaging_procedure.created_on,limitby=(start,stop))
-	else:
-		rows = db(db.imaging_procedure).select(orderby=db.imaging_procedure.created_on,limitby=(start,stop))
+	for i in range(len(rows)):
+		rows[i]['index'] = Items_Per_Page*(page-1)+(i+1)
 	return locals()
 
 def addprocedure():

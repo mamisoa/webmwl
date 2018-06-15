@@ -26,27 +26,28 @@ def listpatient():
 	stop = page*Items_Per_Page
 	start = stop - Items_Per_Page
 	req_sort = request.args(1, cast=int, default = 0)
-
 	total_entries = len(db(db.patient).select())
-	if total_entries % Items_Per_Page > 0:
-		total_entries = (total_entries / Items_Per_Page) + 1
-	else:
-		total_entries = (total_entries / Items_Per_Page)
-
 	if req_sort == 0:
 		rows = db(db.patient).select(orderby=db.patient.created_on,limitby=(start,stop))
 	else:
 		rows = db(db.patient).select(orderby=~db.patient.created_on,limitby=(start,stop))
 	search_str = request.vars.search_str
-
 	if request.vars.search_str:
 		search_str = request.vars.search_str
 		rows = db(db.patient.first_name.contains(search_str) | 
-			db.patient.last_name.contains(search_str)).select(orderby=~db.patient.created_on,limitby=(start,stop))
+			db.patient.last_name.contains(search_str) | 
+			db.patient.patient_id.contains(search_str)).select(orderby=~db.patient.created_on,limitby=(start,stop))
+		total_entries = len(rows)
 	else:
 		rows = db(db.patient).select(orderby=db.patient.created_on,limitby=(start,stop))
 	for row in rows:
 		row.age = cal_age(row.birth_date)
+	if total_entries % Items_Per_Page > 0:
+		total_entries = (total_entries / Items_Per_Page) + 1
+	else:
+		total_entries = (total_entries / Items_Per_Page)
+	for i in range(len(rows)):
+		rows[i]['index'] = Items_Per_Page*(page-1)+(i+1)
 	return locals()
 
 def addpatient():

@@ -34,7 +34,7 @@
             <div class="col">
               <label for="modality"><h6><i class="fa fa-x-ray"></i> Modality </h6></label>
                 <select class="form-control" id="modality" name="modality" required placeholder="Modality">
-                  <option disabled selected value> -- select an option -- </option>
+                  <option selected value>{{=procedure.modality}}</option>
                   {{for modality in modalities:}}
                     <option>{{=modality}}</option>
                   {{pass}}

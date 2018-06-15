@@ -11,7 +11,7 @@
 <form action="{{=URL('liststation')}}">
     <div class="col">
         <div class="input-group mb-3">
-            <input type="text" class="form-control" placeholder="Search by station name" id="txtSearch" name="search_str"/>
+            <input type="text" class="form-control" placeholder="Search by station name/modality/AE title" id="txtSearch" name="search_str"/>
             <div class="input-group-append">
                 <button class="btn btn-outline-secondary" type="submit"><span><i class="fas fa-search"></i></span></button>
             </div>
@@ -22,6 +22,7 @@
 <div class="well">
     <table class='table'>
         <tr>
+            <th>#</th>
             <th>Station Name</th>
             <th>AE title</th>
             <th>Modality</th>
@@ -29,6 +30,7 @@
         </tr>
         {{for station in rows:}}
             <tr>
+                <td>{{=station.index}}</td>
                 <td>{{=station.name}}</td>
                 <td>{{=station.AE_title}}</td>
                 <td>{{=station.modality}}</td>
@@ -59,7 +61,7 @@
                 </li>
             {{pass}}
 
-            {{if len(rows)>=10:}}
+            {{if len(rows)>10:}}
                 <li class="page-item">
                     <a class="page-link" href="{{=URL(args=(page+1))}}">Next</a>
                 </li>

@@ -11,7 +11,7 @@
 <form action="{{=URL('listprocedure')}}">
     <div class="col">
         <div class="input-group mb-3">
-            <input type="text" class="form-control" placeholder="Search by procedure id" id="txtSearch" name="search_str"/>
+            <input type="text" class="form-control" placeholder="Search procedure by description/modality" id="txtSearch" name="search_str"/>
             <div class="input-group-append">
                 <button class="btn btn-outline-secondary" type="submit"><span><i class="fas fa-search"></i></span></button>
             </div>
@@ -22,6 +22,7 @@
 <div class="well">
     <table class='table'>
         <tr>
+            <th>#</th>
             <th>Procedure Id</th>
             <th>Procedure Description</th>
             <th>Procedure Code</th>
@@ -35,6 +36,7 @@
         </tr>
         {{for procedure in rows:}}
             <tr>
+                <td>{{=procedure.index}}</td>
                 <td>{{=procedure.procedure_id}}</td>
                 <td>{{=procedure.procedure_description}}</td>
                 <td>{{=procedure.procedure_code}}</td>
@@ -71,7 +73,7 @@
                 </li>
             {{pass}}
 
-            {{if len(rows)>=10:}}
+            {{if len(rows)>10:}}
                 <li class="page-item">
                     <a class="page-link" href="{{=URL(args=(page+1))}}">Next</a>
                 </li>

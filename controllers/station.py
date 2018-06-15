@@ -9,21 +9,22 @@ def liststation():
 	page = request.args(0, cast=int, default = 1)
 	stop = page*Items_Per_Page
 	start = stop - Items_Per_Page
-
 	total_entries = len(db(db.station).select())
-
+	search_str = request.vars.search_str
+	if request.vars.search_str:
+		search_str = request.vars.search_str
+		rows = db(db.station.name.contains(search_str) |
+				db.station.modality.contains(search_str) |
+				db.station.AE_title.contains(search_str)).select(orderby=~db.station.created_on,limitby=(start,stop))
+		total_entries = len(rows)
+	else:
+		rows = db(db.station).select(orderby=db.station.created_on,limitby=(start,stop))
 	if total_entries % Items_Per_Page > 0:
 		total_entries = (total_entries / Items_Per_Page) + 1
 	else:
 		total_entries = (total_entries / Items_Per_Page)
-
-	search_str = request.vars.search_str
-
-	if request.vars.search_str:
-		search_str = request.vars.search_str
-		rows = db(db.station.name.contains(search_str)).select(orderby=~db.station.created_on,limitby=(start,stop))
-	else:
-		rows = db(db.station).select(orderby=db.station.created_on,limitby=(start,stop))
+	for i in range(len(rows)):
+		rows[i]['index'] = Items_Per_Page*(page-1)+(i+1)
 	return locals()
 
 def addstation():
