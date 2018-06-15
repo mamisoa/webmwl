@@ -33,14 +33,14 @@ def addstation():
 	if len(request.vars)>0:
 		db.station.insert(name=name, modality=modality,AE_title=ae_title)
 		redirect(URL('liststation'))
-	modalities = ["modality1", "modality2", "modality3", "modality4"]
+	modalities = ["CR", "CT", "DX", "MR", "MG", "NM","US", "ES", "EPS","ECG","BMD","BI","PT","OPT", "OT", "RF", "XA"]
 	return locals()
 
 def editstation():
 	if len(request.vars) <=1 :
 		id = request.vars.id
 		station = db.station(id)
-		modalities = ["modality1", "modality2", "modality3", "modality4"]
+		modalities = ["CR", "CT", "DX", "MR", "MG", "NM","US", "ES", "EPS","ECG","BMD","BI","PT","OPT", "OT", "RF", "XA"]
 		return locals()
 	else:
 		id = request.args(0)

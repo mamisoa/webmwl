@@ -165,6 +165,9 @@ mwlapp.controller('MwlListController', ['$scope','$http', function($scope, $http
   // Add Edit MwlListController
   $scope.title = ''
   $scope.action = ''
+  $scope.procSearch=''
+  $scope.stationSearch=''
+  $scope.patientSearch=''
   $scope.open2 = function() {
     $scope.popup2.opened = true;
   }
@@ -222,6 +225,49 @@ mwlapp.controller('MwlListController', ['$scope','$http', function($scope, $http
     .catch( function(error) {
       console.log('Error ='+ error)
     })
+  }
+
+  $scope.$watch(function(scope) { return scope.procSearch },
+              function() {
+                if ($scope.procSearch !== '') {
+                  $scope.loadProcedures($scope.procSearch)
+                }
+              })
+  $scope.$watch(function(scope) { return scope.stationSearch },
+                function() {
+                  if ($scope.stationSearch !== '') {
+                      $scope.loadStations($scope.stationSearch)
+                  }
+                })
+  $scope.$watch(function(scope) { return scope.patientSearch },
+                function() {
+                  if ($scope.patientSearch !== '') {
+                    $scope.loadPatients($scope.patientSearch)
+                  }
+                })
+  $scope.procedureSelected = function (index) {
+    var proc_info = $scope.wl_to_edit['proc_info']
+    proc_info['requested_proc_desc'] = $scope.procedures[index].procedure_description
+    proc_info['proc_id'] = $scope.procedures[index].procedure_id
+    $('#procedureModal').modal('hide')
+  }
+  $scope.stationSelected = function (index) {
+    var sps_info = $scope.wl_to_edit['sps']
+    sps_info['station_aet'] = $scope.stations[index].AE_title
+    sps_info['station_name'] = $scope.stations[index].name
+    sps_info['modality'] = $scope.stations[index].modality
+    $('#stationModal').modal('hide')
+  }
+  $scope.patientSelected = function (index) {
+    var patient_info = $scope.wl_to_edit['patient']
+    patient_info['last_name'] = $scope.patients[index].last_name
+    patient_info['first_name'] = $scope.patients[index].first_name
+    patient_info['patient_id'] = $scope.patients[index].patient_id
+    patient_info['gender'] = $scope.patients[index].gender
+    patient_info['dob'] = new Date($scope.patients[index].birth_date)
+    patient_info['weight'] = $scope.patients[index].weight
+    patient_info['patient_size'] = $scope.patients[index].patient_size
+    $('#patientModal').modal('hide')
   }
   // Initial load
   $scope.loadMwlItems()

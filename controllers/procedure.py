@@ -23,7 +23,7 @@ def listprocedure():
 	return locals()
 
 def addprocedure():
-	modalities = ["modality1", "modality2", "modality3", "modality4"]
+	modalities = ["CR", "CT", "DX", "MR", "MG", "NM","US", "ES", "EPS","ECG","BMD","BI","PT","OPT", "OT", "RF", "XA"]
 	procedure_id = request.vars.procedure_id
 	procedure_desc = request.vars.procedure_desc
 	procedure_code = request.vars.procedure_code
@@ -50,7 +50,7 @@ def deleteprocedure():
 	return locals()
 
 def editprocedure():
-	modalities = ["modality1", "modality2", "modality3", "modality4"]
+	modalities = ["CR", "CT", "DX", "MR", "MG", "NM","US", "ES", "EPS","ECG","BMD","BI","PT","OPT", "OT", "RF", "XA"]
 	if len(request.vars) <=1 :
 		id = request.vars.id
 		procedure = db.imaging_procedure(id)

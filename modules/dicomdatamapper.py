@@ -111,7 +111,7 @@ def fill_sps_details_from_mwl(mwl_ds, worklist):
     alpha = string.ascii_uppercase
     num = string.digits
     id = ''.join(random.choice(alpha + num) for _ in range(7))
-    #sps_seq[0x40,0x09].value = 'SPD' + id
+    sps_seq[0x40,0x09].value = 'SPD' + id
     del sps_seq[0x40,0x09]
     sps_seq[0x40,0x07].value = worklist['proc_info']['requested_proc_desc']
     sps_seq[0x40,0x02].value = change_date_to_dicom_format(worklist['sps']['start_date'])
@@ -131,11 +131,18 @@ def fill_isr_info(ds, mwl_item):
         'referring_physician': ''
     }
     if 'ReferringPhysicianName' in ds:
-        val = ds.ReferringPhysicianName['Alphabetic']
+        if 'Alphabetic' in ds.ReferringPhysicianName:
+            val = ds.ReferringPhysicianName['Alphabetic']
+        else:
+            val = ds.ReferringPhysicianName
+        #val = ds.ReferringPhysicianName['Alphabetic']
         names = parse_person_name(val)
         mwl_item['isr']['referring_physician'] = names[0] + ' ' +names[1]
     if 'RequestingPhysician' in ds:
-        val = ds.RequestingPhysician['Alphabetic']
+        if 'Alphabetic' in ds.RequestingPhysician:
+            val = ds.RequestingPhysician['Alphabetic']
+        else:
+            val = ds.RequestingPhysician
         names = parse_person_name(val)
         mwl_item['isr']['requesting_physician'] = names[0] + ' ' + names[1]
     if 'AccessionNumber' in ds:

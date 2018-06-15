@@ -144,12 +144,8 @@
   </div>
   <br>
   <div class="row">
-
-    <div class="col">
-      <input placeholder="Type patient name to select Patient" type="text" ng-model="selected_patient" uib-typeahead="patient.first_name +patient.last_name for patient in loadPatients($viewValue) | filter:$viewValue | limitTo:8" class="form-control" typeahead-no-results="noResults" typeahead-loading="loadingPatients"/>
-    </div>
   <div class="col">
-    <a href="#" class="btn btn-primary">{[{action}]} Patient</a>
+    <a href="#" class="btn btn-primary" data-toggle="modal" data-target="#patientModal">{[{action}]} Patient</a>
   </div>
 </div>
 </div>
@@ -209,9 +205,6 @@
 <br>
 <div class="row">
   <div class="col">
-      <input placeholder="Type station name to select Station" type="text" ng-model="selected_station" uib-typeahead="station.name for station in loadStations($viewValue) | filter:$viewValue | limitTo:8" class="form-control" typeahead-no-results="noResults" typeahead-loading="loadingStations"/>
-  </div>
-  <div class="col">
     <a href="#" class="btn btn-primary" data-toggle="modal" data-target="#stationModal">{[{action}]} Station</a>
   </div>
 </div>
@@ -223,8 +216,7 @@
   <div class="row">
   <div class="col-sm-6">
   <label for="first_name"><h6><i class="fa fa-procedures"></i> Requested Procedure</h6></label>
-  <!--<input type="text" class="form-control" ng-model="wl_to_edit.proc_info.requested_proc_desc" placeholder="Procudure">-->
-  <input placeholder="Type procedure_id to select Procudure" type="text" ng-model="selected_procedure" uib-typeahead="procedure.procedure_id for procedure in loadProcedures($viewValue) | filter:$viewValue | limitTo:8" class="form-control" typeahead-no-results="noResults" typeahead-loading="loadingProcedures"/>
+  <input type="text" class="form-control" ng-model="wl_to_edit.proc_info.requested_proc_desc" placeholder="Procudure">
   </div>
 </div>
   <br>
@@ -260,7 +252,7 @@
         <div class="row">
           <div class="col">
             <div class="input-group">
-              <input type="text" class="form-control" placeholder="Search..." aria-label="Recipient's username" aria-describedby="basic-addon2">
+              <input type="text" class="form-control" ng-model="procSearch" placeholder="Search..." aria-label="Recipient's username" aria-describedby="basic-addon2">
               <div class="input-group-append">
                 <button class="btn btn-outline-secondary" type="button"><span><i class="fas fa-search"></i></span></button>
               </div>
@@ -279,17 +271,16 @@
           </thead>
           <tbody>
             <tr ng-repeat="procedure in procedures">
-              <th scope="row">{[{$index}]} </th>
+              <th scope="row">{[{$index + 1}]} </th>
               <td> {[{procedure.procedure_id}]} </td>
-              <td> {[{procedure.procedure_id}]} </td>
-              <td> <a href="#" ng-click="editwl($index)"><i class="fas fa-hand-pointer"></i></a></td>
+              <td> {[{procedure.procedure_description}]} </td>
+              <td> <a href="#" ng-click="procedureSelected($index)"><i class="fas fa-hand-pointer"></i></a></td>
             </tr>
           </tbody>
         </table>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-
       </div>
     </div>
   </div>
@@ -307,14 +298,13 @@
         <div class="row">
           <div class="col">
             <div class="input-group">
-              <input type="text" class="form-control" placeholder="Search..." aria-label="Recipient's username" aria-describedby="basic-addon2">
+              <input type="text"  class="form-control" ng-model="stationSearch" placeholder="Search..." aria-label="Recipient's username" aria-describedby="basic-addon2">
               <div class="input-group-append">
                 <button class="btn btn-outline-secondary" type="button"><span><i class="fas fa-search"></i></span></button>
               </div>
             </div>
           </div>
         </div>
-
         <table class="table">
           <thead>
             <tr>
@@ -327,18 +317,67 @@
           </thead>
           <tbody>
             <tr ng-repeat="station in stations">
-              <th scope="row">{[{$index}]} </th>
-              <td> {[{station.procedure_id}]} </td>
-              <td> {[{station.procedure_id}]} </td>
-              <td> {[{station.procedure_id}]} </td>
-              <td> <a href="#" ng-click="editwl($index)"><i class="fas fa-hand-pointer"></i></a></td>
+              <th scope="row">{[{$index + 1}]} </th>
+              <td> {[{station.name}]} </td>
+              <td> {[{station.AE_title}]} </td>
+              <td> {[{station.modality}]} </td>
+              <td> <a href="#" ng-click="stationSelected($index)"><i class="fas fa-hand-pointer"></i></a></td>
             </tr>
           </tbody>
         </table>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-
+      </div>
+    </div>
+  </div>
+ </div>
+  <div class="modal fade" id="patientModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="patientModalTitle">Select Patient</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <div class="row">
+            <div class="col">
+              <div class="input-group">
+                <input type="text"  class="form-control" ng-model="patientSearch" placeholder="Search..." aria-label="Recipient's username" aria-describedby="basic-addon2">
+                <div class="input-group-append">
+                  <button class="btn btn-outline-secondary" type="button"><span><i class="fas fa-search"></i></span></button>
+                </div>
+              </div>
+            </div>
+          </div>
+          <table class="table">
+            <thead>
+              <tr>
+                <th scope="col"> # </th>
+                <th scope="col"> Patient Name </th>
+                <th scope="col"> Patient Id </th>
+                <th scope="col"> Gender </th>
+                <th scope="col"> Age </th>
+                <th scope="col"> Action </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr ng-repeat="patient in patients">
+                <th scope="row">{[{$index + 1}]} </th>
+                <td> {[{patient.last_name}]} {[{patient.first_name}]} </td>
+                <td> {[{patient.patient_id}]} </td>
+                <td> {[{patient.gender}]} </td>
+                <td> {[{patient.birth_date}]} </td>
+                <td> <a href="#" ng-click="patientSelected($index)"><i class="fas fa-hand-pointer"></i></a></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        </div>
       </div>
     </div>
   </div>
