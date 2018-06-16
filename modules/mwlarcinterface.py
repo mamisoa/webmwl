@@ -57,6 +57,10 @@ class MwlInterface:
             mwl_items.append(mwl_item)
         #print unicode(mwl_items)
         return mwl_items
+    def del_mwl(self, studyUid, spsId):
+        mwl_url = self.BASE_URL + 'aets/DCM4CHEE/rs/mwlitems/' + studyUid + '/' + spsId
+        requests.delete(mwl_url)
+
     def create_mwl(self, sample_wl_folder, worklist):
         wl_ds = from_worklist_json(sample_wl_folder, worklist)
         wl_json = convert_dataset_to_json(wl_ds)
@@ -109,10 +113,11 @@ if __name__ == '__main__':
         'study_uid':'1.2.3.4.5.284928943.32434'
     }
     arc_if = MwlInterface()
-    arc_if.get_device('dcm4chee-arc')
+    #arc_if.get_device('dcm4chee-arc')
     #print()
     #pid = arc_if.create_patient(mwl_item)
     # mwl_item['patient']['patient_id'] = pid
     #arc_if.create_mwl(mwl_item)
     #print(arc_if.get_mwl({'scheduled_date':'20180611'}))
-    #print(arc_if.get_mwl({"status":"STARTED"}))
+    print(arc_if.get_mwl({"status":"SCHEDULED"}))
+    #arc_if.del_mwl('2.25.247228648750766432344279402705598180830', 'SPS-00000001')

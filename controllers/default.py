@@ -30,6 +30,13 @@ def get_mwl():
     print(result)
     return response.json({'result': result})
 
+def del_mwl():
+    print(request.vars.studyUid)
+    print(request.vars.spsId)
+    mwl = MwlInterface()
+    mwl.del_mwl(request.vars.studyUid,request.vars.spsId)
+    return response.json({'result': 'success'})
+
 def save_mwl():
     print(request.vars)
     worklist = simplejson.loads(request.body.read())
@@ -63,7 +70,7 @@ def get_patients():
     if request.vars.search_str:
         search_str = request.vars.search_str
         rows = db(db.patient.first_name.contains(search_str) |
-            db.patient.last_name.contains(search_str) | 
+            db.patient.last_name.contains(search_str) |
             db.patient.patient_id.contains(search_str)).select(orderby=~db.patient.created_on)
     else:
         rows = db(db.patient).select(orderby=db.patient.created_on)

@@ -126,6 +126,31 @@ mwlapp.controller('MwlListController', ['$scope','$http', function($scope, $http
   $scope.open1 = function() {
     $scope.popup1.opened = true;
   }
+  $scope.delete_wl = function(index) {
+    var studyUid = $scope.mwlItems[index]['proc_info']['study_uid']
+    var spsId = $scope.mwlItems[index]['sps']['sps_id']
+    swal({
+      title: "Are you sure?",
+      text: "The selected worklist item will be deleted !",
+      icon: "warning",
+      buttons: true,
+      dangerMode: true,
+    })
+    .then((willDelete) => {
+      if (willDelete) {
+          var promise = $http.post('del_mwl', params={'studyUid':studyUid,'spsId':spsId})
+          promise.then( function(data) {
+            swal({
+              title: "Success",
+              text: "The selected item has been deleted",
+              icon: "success",
+              button: "OK",
+            })
+            $scope.loadMwlItems()
+          })
+      }
+    })
+  }
   $scope.editwl = function (index) {
     $scope.wl_to_edit = $scope.mwlItems[index]
     $scope.show_list = false
@@ -194,6 +219,12 @@ mwlapp.controller('MwlListController', ['$scope','$http', function($scope, $http
     promise.then ( function(result) {
       console.log('Saved Successfully')
       $scope.cancel()
+      swal({
+        title: "Success",
+        text: "Worklist item has been saved successfully",
+        icon: "success",
+        button: "OK",
+      })
     })
     .catch ( function(error) {
       console.log('Error in Saving MWL ' + error)

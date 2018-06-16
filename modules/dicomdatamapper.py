@@ -108,11 +108,14 @@ def fill_sps_details_from_mwl(mwl_ds, worklist):
     sps_seq[0x08,0x60].value = worklist['sps']['modality']
     sps_seq[0x40,0x01].value = worklist['sps']['station_aet']
     sps_seq[0x40,0x10].value = worklist['sps']['station_name']
-    alpha = string.ascii_uppercase
-    num = string.digits
-    id = ''.join(random.choice(alpha + num) for _ in range(7))
-    sps_seq[0x40,0x09].value = 'SPD' + id
-    del sps_seq[0x40,0x09]
+    if worklist['sps']['sps_id'] == '':
+        alpha = string.ascii_uppercase
+        num = string.digits
+        id = ''.join(random.choice(alpha + num) for _ in range(7))
+        sps_seq[0x40,0x09].value = 'SPD' + id
+    else:
+        sps_seq[0x40,0x09].value = worklist['sps']['sps_id']
+
     sps_seq[0x40,0x07].value = worklist['proc_info']['requested_proc_desc']
     sps_seq[0x40,0x02].value = change_date_to_dicom_format(worklist['sps']['start_date'])
     #sps_seq[0x08,0x60] = worklist.sps.modality
@@ -120,7 +123,10 @@ def fill_sps_details_from_mwl(mwl_ds, worklist):
 def fill_procedure_details_from_mwl(mwl_ds, worklist):
     mwl_ds[0x40,0x1001].value = worklist['proc_info']['proc_id']
     mwl_ds[0x32,0x1060].value = worklist['proc_info']['requested_proc_desc']
-    del mwl_ds[0x20,0x0d]
+    if worklist['proc_info']['study_uid'] == '':
+        mwl_ds[0x20,0x0d].value = pydicom.uid.generate_uid()
+    else:
+        mwl_ds[0x20,0x0d].value = worklist['proc_info']['study_uid']
 
 ###########################################################################################
 
