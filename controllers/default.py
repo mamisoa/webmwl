@@ -32,7 +32,9 @@ def save_mwl():
 def get_stations():
     if request.vars.search_str:
         search_str = request.vars.search_str
-        rows = db(db.station.name.contains(search_str)).select(orderby=db.station.created_on)
+        rows = db(db.station.name.contains(search_str) |
+                db.station.modality.contains(search_str) |
+                db.station.AE_title.contains(search_str)).select(orderby=db.station.created_on)
     else:
         rows = db(db.station).select(orderby=db.station.created_on)
     return response.json({'result': rows})
@@ -40,7 +42,9 @@ def get_stations():
 def get_procedures():
     if request.vars.search_str:
         search_str = request.vars.search_str
-        rows = db(db.imaging_procedure.procedure_id.contains(search_str)).select(orderby=~db.imaging_procedure.created_on)
+        rows = db(db.imaging_procedure.procedure_id.contains(search_str) |
+                db.imaging_procedure.procedure_description.contains(search_str) |
+                db.imaging_procedure.modality.contains(search_str)).select(orderby=~db.imaging_procedure.created_on)
     else:
         rows = db(db.imaging_procedure).select(orderby=db.imaging_procedure.created_on)
     return response.json({'result': rows})
@@ -49,7 +53,8 @@ def get_patients():
     if request.vars.search_str:
         search_str = request.vars.search_str
         rows = db(db.patient.first_name.contains(search_str) | 
-            db.patient.last_name.contains(search_str)).select(orderby=~db.patient.created_on)
+            db.patient.last_name.contains(search_str) | 
+            db.patient.patient_id.contains(search_str)).select(orderby=~db.patient.created_on)
     else:
         rows = db(db.patient).select(orderby=db.patient.created_on)
     return response.json({"result":rows})
