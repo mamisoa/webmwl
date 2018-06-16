@@ -10,7 +10,8 @@ mwlapp.controller('MwlListController', ['$scope','$http', function($scope, $http
   $scope.selectedStatus = 'SCHEDULED'
   $scope.selectedDate = 'TODAY'
   $scope.searchString = ''
-  $scope.selectedFilterDate = new Date()
+  $scope.fltr = {}
+  $scope.fltr.selectedFilterDate = new Date()
   $scope.format = 'dd-MMMM-yyyy'
   $scope.searchString = ''
   $scope.show_list = true
@@ -55,6 +56,9 @@ mwlapp.controller('MwlListController', ['$scope','$http', function($scope, $http
   $scope.formatDate = function (date) {
     return date.getFullYear() + '-' + ('0' + (date.getMonth() + 1)).slice(-2) + '-' + ('0' + date.getDate()).slice(-2)
   }
+  $scope.formatDateDicom = function (date) {
+    return date.getFullYear() + ('0' + (date.getMonth() + 1)).slice(-2) + ('0' + date.getDate()).slice(-2)
+  }
   var getAge = function (dateString) {
       var today = new Date()
       var birthDate = new Date(dateString)
@@ -70,7 +74,7 @@ mwlapp.controller('MwlListController', ['$scope','$http', function($scope, $http
   }
   $scope.loadMwlItems = function() {
     var qparams = {params: {'status': $scope.selectedStatus,
-      'date': $scope.formatDate($scope.selectedFilterDate),
+      'date': $scope.formatDate($scope.fltr.selectedFilterDate),
       'page': $scope.currentPage,
       'pageSize': $scope.pageSize}}
     if ($scope.searchString !== '') {
@@ -91,27 +95,33 @@ mwlapp.controller('MwlListController', ['$scope','$http', function($scope, $http
   }
   $scope.selectYesterday = function () {
     $scope.selectedDate = 'YESTERDAY'
-    $scope.selectedFilterDate = $scope.yesterday()
+    $scope.fltr.selectedFilterDate = $scope.yesterday()
+    $scope.loadMwlItems()
   }
   $scope.selectToday = function () {
     $scope.selectedDate = 'TODAY'
-    $scope.selectedFilterDate = $scope.today()
+    $scope.fltr.selectedFilterDate = $scope.today()
+    $scope.loadMwlItems()
   }
   $scope.selectTomorrow = function () {
     $scope.selectedDate = 'TOMORROW'
-    $scope.selectedFilterDate = $scope.tomorrow()
+    $scope.fltr.selectedFilterDate = $scope.tomorrow()
+    $scope.loadMwlItems()
   }
   $scope.selectADate = function () {
     $scope.selectedDate = 'DATE'
   }
   $scope.selectScheduled = function () {
     $scope.selectedStatus = 'SCHEDULED'
+    $scope.loadMwlItems()
   }
   $scope.selectInProgress = function () {
     $scope.selectedStatus = 'IN PROGRESS'
+    $scope.loadMwlItems()
   }
   $scope.selectCompleted = function () {
     $scope.selectedStatus = 'COMPLETED'
+    $scope.loadMwlItems()
   }
   $scope.open1 = function() {
     $scope.popup1.opened = true;
@@ -177,6 +187,9 @@ mwlapp.controller('MwlListController', ['$scope','$http', function($scope, $http
     $scope.loadMwlItems()
   }
   $scope.save = function () {
+    // Fix dates
+    $scope.wl_to_edit['sps']['start_date'] = $scope.formatDateDicom($scope.wl_to_edit['sps']['start_date'])
+    $scope.wl_to_edit['patient']['dob'] = $scope.formatDateDicom($scope.wl_to_edit['patient']['dob'])
     var promise = $http.post('save_mwl',$scope.wl_to_edit)
     promise.then ( function(result) {
       console.log('Saved Successfully')
@@ -243,6 +256,12 @@ mwlapp.controller('MwlListController', ['$scope','$http', function($scope, $http
                 function() {
                   if ($scope.patientSearch !== '') {
                     $scope.loadPatients($scope.patientSearch)
+                  }
+                })
+  $scope.$watch(function(scope) { return scope.popup1.opened },
+                function() {
+                  if(! $scope.popup1.opened) {
+                    $scope.loadMwlItems()
                   }
                 })
   $scope.procedureSelected = function (index) {

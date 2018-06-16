@@ -25,7 +25,7 @@
 </div>
   <div class="col" ng-if="selectedDate == 'DATE'">
     <p class="input-group">
-         <input type="text" class="form-control" uib-datepicker-popup="{{format}}" ng-model="selectedFilterDate" is-open="popup1.opened" datepicker-options="dateOptions" ng-required="true" close-text="Close" alt-input-formats="altInputFormats" />
+         <input type="text" class="form-control" uib-datepicker-popup="{{format}}" ng-model="fltr.selectedFilterDate" is-open="popup1.opened" datepicker-options="dateOptions" ng-required="true" close-text="Close" alt-input-formats="altInputFormats" />
          <span class="input-group-btn">
            <button type="button" class="btn btn-default" ng-click="open1()"><i class="fas fa-calendar"></i></button>
          </span>

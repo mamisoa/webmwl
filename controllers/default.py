@@ -15,8 +15,18 @@ def index():
 
 def get_mwl():
     print(request.vars)
+    print(request.vars.date)
+    print(request.vars.status)
+    print(request.vars.page)
+    print(request.vars.pageSize)
+    filter = {}
+    filter['page_size'] = request.vars.pageSize
+    filter['offset'] = int(request.vars.pageSize) * (int(request.vars.page) -1)
+    filter['status'] = request.vars.status
+    filter['scheduled_date'] = request.vars.date.replace('-','')
+    print (filter)
     mwl = MwlInterface()
-    result = mwl.get_mwl()
+    result = mwl.get_mwl(filter)
     print(result)
     return response.json({'result': result})
 
@@ -48,7 +58,7 @@ def get_procedures():
 def get_patients():
     if request.vars.search_str:
         search_str = request.vars.search_str
-        rows = db(db.patient.first_name.contains(search_str) | 
+        rows = db(db.patient.first_name.contains(search_str) |
             db.patient.last_name.contains(search_str)).select(orderby=~db.patient.created_on)
     else:
         rows = db(db.patient).select(orderby=db.patient.created_on)
