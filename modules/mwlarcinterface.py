@@ -36,6 +36,11 @@ class MwlInterface:
                 search[self.DCM_FIELD_MAP['status']] = filter['status']
             if 'scheduled_date' in filter:
                 search[self.DCM_FIELD_MAP['scheduled_date']] = filter['scheduled_date']
+            if 'search' in filter and filter['search'] != '':
+                search[self.DCM_FIELD_MAP['patient_name']] = filter['search']
+                search['fuzzymatching'] = 'true'
+            if 'modality' in filter and filter['modality'] != 'ALL':
+                search[self.DCM_FIELD_MAP['modality']] = filter['modality']
 
         mwl_url = self.BASE_URL + 'aets/DCM4CHEE/rs/mwlitems'
         #search['00400100.00080060'] = 'MR'

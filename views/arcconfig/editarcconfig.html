@@ -1,5 +1,6 @@
 {{extend 'layout.html'}}
 <script src="{{=URL('static','js/mwlapp.js')}}"></script>
+<main role="main" class="container">
 <form id="form1" enctype="multipart/form-data" method="post" action="{{=URL('editarcconfig', args=(id))}}">
     <div class="p-3 mb-2 bg-light text-dark">
         <h4 align="center"> Edit Achive Configuration</h4>
@@ -28,3 +29,4 @@
         </div>
     </div>
 </form>
+</main>

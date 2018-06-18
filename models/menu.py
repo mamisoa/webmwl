@@ -66,5 +66,8 @@ if not configuration.get('app.production'):
             (T('Arc Config'), False,
              '/webmwl/arcconfig/listarcconfig'),
         ]),
+        (T('Worklist'), False, None, [
+            (T('MWL List'), False,
+             '/webmwl/default/index'),
+        ]),
     ]
-

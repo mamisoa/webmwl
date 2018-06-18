@@ -23,6 +23,8 @@ def get_mwl():
     filter['page_size'] = request.vars.pageSize
     filter['offset'] = int(request.vars.pageSize) * (int(request.vars.page) -1)
     filter['status'] = request.vars.status
+    filter['search'] = request.vars.search
+    filter['modality'] = request.vars.modality
     filter['scheduled_date'] = request.vars.date.replace('-','')
     print (filter)
     mwl = MwlInterface()

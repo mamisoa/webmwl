@@ -1,14 +1,20 @@
 {{extend 'layout.html'}}
 <script src="{{=URL('static','js/mwlapp.js')}}"></script>
+<main role="main" class="container">
 <div>
     <h3>
         List of procedures &nbsp; &nbsp;
-        <a href="{{=URL('addprocedure')}}" class="btn btn-success btn-md">
-          <span class="fa fa-plus"></span>
-        </a>
+
     </h3>
 </div>
-<form action="{{=URL('listprocedure')}}">
+<br>
+<div class="row">
+  <div class="col align-self-start">
+    <a href="{{=URL('addprocedure')}}" class="btn btn-success btn-md">
+      <span class="fa fa-plus"></span>
+    </a>
+  </div>
+<form class="col align-self-start" action="{{=URL('listprocedure')}}">
     <div class="col">
         <div class="input-group mb-3">
             <input type="text" class="form-control" placeholder="Search procedure by description/modality" id="txtSearch" name="search_str"/>
@@ -18,6 +24,7 @@
         </div>
       </div>
 </form>
+</div>
 <br>
 <div class="well">
     <table class='table'>
@@ -82,3 +89,4 @@
         </ul>
     </nav>
 </div>
+</main>

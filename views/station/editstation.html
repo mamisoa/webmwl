@@ -1,5 +1,6 @@
 {{extend 'layout.html'}}
 <script src="{{=URL('static','js/mwlapp.js')}}"></script>
+<main role="main" class="container">
 <form id="form1" enctype="multipart/form-data" method="post" action="{{=URL('editstation', args=(id))}}">
     <div class="p-3 mb-2 bg-light text-dark">
         <h4> Edit Station</h4>
@@ -33,3 +34,4 @@
         </div>
     </div>
 </form>
+</main>

@@ -1,14 +1,20 @@
 {{extend 'layout.html'}}
 <script src="{{=URL('static','js/mwlapp.js')}}"></script>
+<main role="main" class="container">
 <div>
     <h3>
         List of Stations&nbsp; &nbsp;
-        <a href="{{=URL('addstation')}}" class="btn btn-success btn-md">
-          <span class="fa fa-plus"></span>
-        </a>
     </h3>
 </div>
-<form action="{{=URL('liststation')}}">
+<br>
+<div class="row">
+  <div class="col align-self-start">
+    <a href="{{=URL('addstation')}}" class="btn btn-success btn-md">
+      <span class="fa fa-plus"></span>
+    </a>
+  </div>
+
+<form class="col align-self-start" action="{{=URL('liststation')}}">
     <div class="col">
         <div class="input-group mb-3">
             <input type="text" class="form-control" placeholder="Search by station name/modality/AE title" id="txtSearch" name="search_str"/>
@@ -18,6 +24,7 @@
         </div>
       </div>
 </form>
+</div>
 <br>
 <div class="well">
     <table class='table'>
@@ -45,6 +52,7 @@
     </table>
 </div>
 
+
 <div class="row">
     <nav aria-label="Page navigation example">
         <ul class="pagination justify-content-center">
@@ -70,3 +78,4 @@
         </ul>
     </nav>
 </div>
+</main>

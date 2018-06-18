@@ -9,13 +9,15 @@ mwlapp.config(function($interpolateProvider) {
 mwlapp.controller('MwlListController', ['$scope','$http', function($scope, $http) {
   $scope.selectedStatus = 'SCHEDULED'
   $scope.selectedDate = 'TODAY'
-  $scope.searchString = ''
   $scope.fltr = {}
   $scope.fltr.selectedFilterDate = new Date()
+  $scope.fltr.searchString = ''
+  $scope.selectedModality = 'ALL'
+  $scope.modalities = ["CR", "CT", "DX", "MR", "MG", "NM","US", "ES", "EPS","ECG","BMD","BI","PT","OPT", "OT", "RF", "XA"]
   $scope.format = 'dd-MMMM-yyyy'
-  $scope.searchString = ''
   $scope.show_list = true
   $scope.show_edit = false
+  $scope.loading = false
   $scope.popup1 = {
     opened: false
   }
@@ -73,13 +75,14 @@ mwlapp.controller('MwlListController', ['$scope','$http', function($scope, $http
       return Math.abs(m) + ' months'
   }
   $scope.loadMwlItems = function() {
+    $scope.loading = true
     var qparams = {params: {'status': $scope.selectedStatus,
       'date': $scope.formatDate($scope.fltr.selectedFilterDate),
+      'search': ($scope.fltr.searchString !== '') ? ($scope.fltr.searchString + '*') : '',
+      'modality': $scope.selectedModality,
       'page': $scope.currentPage,
       'pageSize': $scope.pageSize}}
-    if ($scope.searchString !== '') {
-      qparams.params['search'] = $scope.searchString
-    }
+
     var promise = $http.get('get_mwl',qparams)
     promise.then (function (response) {
       $scope.mwlItems.length = 0
@@ -88,10 +91,16 @@ mwlapp.controller('MwlListController', ['$scope','$http', function($scope, $http
         $scope.mwlItems[i]['patient']['age'] = getAge($scope.mwlItems[i]['patient']['dob'])
       }
       console.log(data)
+      $scope.loading = false
     })
     .catch( function(error) {
+      $scope.loading = false
       console.log('Error ='+ error)
     })
+  }
+  $scope.selectModality = function (modality) {
+    $scope.selectedModality = modality
+    $scope.loadMwlItems()
   }
   $scope.selectYesterday = function () {
     $scope.selectedDate = 'YESTERDAY'
@@ -151,8 +160,16 @@ mwlapp.controller('MwlListController', ['$scope','$http', function($scope, $http
       }
     })
   }
+  $scope.convert_dicom_date_to_date = function(dtString) {
+    var year = dtString.substring(0,4)
+    var month = dtString.substring(4,6)
+    var day = dtString.substring(6,8)
+    return new Date(year+'-'+month+'-'+day)
+  }
   $scope.editwl = function (index) {
     $scope.wl_to_edit = $scope.mwlItems[index]
+    $scope.wl_to_edit['patient']['dob'] = new Date($scope.wl_to_edit['patient']['dob'])
+    $scope.wl_to_edit['sps']['start_date'] = new Date($scope.wl_to_edit['sps']['start_date'])
     $scope.show_list = false
     $scope.show_edit = true
     $scope.title = 'Edit'

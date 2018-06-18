@@ -14,6 +14,18 @@
       <button type="button" class="btn btn-secondary" ng-class="{active: selectedStatus == 'COMPLETED'}" ng-click="selectCompleted()"><i class="fas fa-check"></i></button>
     </div>
   </div>
+    <div class="col">
+      <div class="btn-group">
+        <button type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          MODALITY : {[{selectedModality}]}
+        </button>
+        <div class="dropdown-menu">
+          <a class="dropdown-item" ng-repeat="mod in modalities" href="#" ng-click="selectModality(mod)">{[{mod}]}</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="#" ng-click="selectModality('ALL')">ALL</a>
+        </div>
+      </div>
+    </div>
 
   <div class="col">
   <div class="btn-toolbar" role="toolbar" aria-label="Basic example">
@@ -33,9 +45,9 @@
   </div>
   <div class="col">
     <div class="input-group mb-3">
-      <input type="text" class="form-control" placeholder="Search..." aria-label="Recipient's username" aria-describedby="basic-addon2">
+      <input type="text" class="form-control" ng-model="fltr.searchString" placeholder="Search..." aria-label="Recipient's username" aria-describedby="basic-addon2">
       <div class="input-group-append">
-        <button class="btn btn-outline-secondary" type="button"><span><i class="fas fa-search"></i></span></button>
+        <button class="btn btn-outline-secondary" type="button" ng-click="loadMwlItems()"><span><i class="fas fa-search"></i></span></button>
       </div>
     </div>
   </div>
@@ -46,7 +58,7 @@
   </div>
       <br>
     <div class="row">
-  <table class="table">
+  <table class="table" >
     <thead>
 <tr>
   <th scope="col">#</th>
@@ -61,8 +73,28 @@
   <th scope="col">Actions</th>
 </tr>
 </thead>
-<tbody>
-<tr ng-repeat="item in mwlItems" >
+
+<tbody >
+  <tr ng-if="loading">
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td >
+      <div class="loader" ng-if="loading">
+      </div>
+    </td>
+  </tr>
+  <tr ng-if="!loading && mwlItems.length === 0">
+    <td></td>
+    <td></td>
+    <td></td>
+    <td colspan="6">
+      <p class="text-danger"> No results for the selected filter criteria. Please change your filters and try again! </p>
+    </td>
+  </tr>
+<tr  ng-if="!loading" ng-repeat="item in mwlItems" >
   <th scope="row">{[{$index + 1}]}</th>
   <td>{[{item.patient.last_name}]} {[{item.patient.first_name}]}</td>
   <td>{[{item.patient.patient_id}]}</td>
@@ -75,6 +107,7 @@
   <td><span><a class="btn btn-primary" href="#" ng-click="editwl($index)"><i class="fas fa-edit"></i></a>  <a href="#" class="btn btn-danger" ng-click="delete_wl($index)"><i class="fas fa-trash-alt"></i></a></td>
 </tr>
 </tbody>
+
 </table>
   </div>
   <br>
@@ -119,8 +152,8 @@
     <div class="col">
        <label for="first_name"><h6><i class="fa fa-male"></i><i class="fa fa-female"></i> Gender</h6></label>
        <br>
-      <label class="radio-inline"><input type="radio" name="gender" value="Male" checked><h6>Male</h6></label>
-      <label class="radio-inline"><input type="radio" name="gender" value="Female"><h6>Female</h6></label>
+      <label class="radio-inline"><input type="radio" name="gender" value="Male" ng-model="wl_to_edit.patient.gender"><h6>Male</h6></label>
+      <label class="radio-inline"><input type="radio" name="gender" value="Female" ng-model="wl_to_edit.patient.gender"><h6>Female</h6></label>
     </div>
   </div>
   <div class="row">
