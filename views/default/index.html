@@ -131,147 +131,199 @@
     <h2> {[{title}]} Modality Worklist </h2>
     <p> You can edit the schedule and Image Service Request details. Editing Patient details will only effect the changes for this MWL item. </p>
     <form>
-      <div class="p-3 mb-2 bg-light text-dark">
-      <h4> Patient <h4>
-       <div class="dropdown-divider"></div>
-  <div class="row">
-    <div class="col">
-       <label for="first_name"><h6><i class="fa fa-user"></i> First Name </h6></label>
-       <input id="first_name" type="text" class="form-control" ng-model="wl_to_edit.patient.first_name" placeholder="First name">
-    </div>
-    <div class="col">
-      <label for="first_name"><h6><i class="fa fa-user"></i> Last Name</h6></label>
-      <input type="text" class="form-control" ng-model="wl_to_edit.patient.last_name" placeholder="Last name">
-    </div>
-  </div>
-  <div class="row">
-    <div class="col">
-       <label for="first_name"><h6><i class="fa fa-id-badge"></i> Patient Id</h6></label>
-       <input id="first_name" type="text" class="form-control" ng-model="wl_to_edit.patient.patient_id" placeholder="Patient Id">
-    </div>
-    <div class="col">
-       <label for="first_name"><h6><i class="fa fa-male"></i><i class="fa fa-female"></i> Gender</h6></label>
-       <br>
-      <label class="radio-inline"><input type="radio" name="gender" value="Male" ng-model="wl_to_edit.patient.gender"><h6>Male</h6></label>
-      <label class="radio-inline"><input type="radio" name="gender" value="Female" ng-model="wl_to_edit.patient.gender"><h6>Female</h6></label>
-    </div>
-  </div>
-  <div class="row">
-    <div class="col">
-       <label for="first_name"><h6><i class="fa fa-calendar-alt"></i> Date of Birth</h6></label>
-       <p class="input-group">
-            <input type="text" class="form-control" uib-datepicker-popup="{{format}}" ng-model="wl_to_edit.patient.dob" is-open="popup1.opened" datepicker-options="dateOptions" ng-required="true" close-text="Close" alt-input-formats="altInputFormats" />
-            <span class="input-group-btn">
-              <button type="button" class="btn btn-default" ng-click="open1()"><i class="fas fa-calendar"></i></button>
-            </span>
-       </p>
-    </div>
-    <div class="col">
-      <label for="first_name"><h6><i class="fa fa-weight"></i> Weight</h6></label>
-      <input id="first_name" type="text" class="form-control" ng-model="wl_to_edit.patient.weight" placeholder="Weight">
-    </div>
-    <div class="col">
-      <label for="first_name"><h6><i class="fa fa-tape"></i> Size</h6></label>
-      <input id="first_name" type="text" class="form-control" ng-model="wl_to_edit.patient.patient_size" placeholder="Weight">
-    </div>
-  </div>
-  <br>
-  <div class="row">
-  <div class="col">
-    <a href="#" class="btn btn-primary" data-toggle="modal" data-target="#patientModal">{[{action}]} Patient</a>
-  </div>
+      <div id="accordion">
+        <div class="card">
+          <div class="card-header" id="patient">
+            <div class="row">
+              <div class="col">
+                <button class="btn btn-outline-dark" data-toggle="collapse" data-target="#patientForm" aria-expanded="true" aria-controls="patientForm">
+                  Patient
+                </button>
+              </div>
+              <div class="col-align-self-end" style="margin-right:20px;">
+                <i color="green" class="green fas fa-check fa-lg" style="color:green;"> </i>
+              </div>
+            </div>
+          </div>
+          <div id="patientForm" class="collapse show" aria-labelledby="patient" data-parent="#accordion">
+            <div class="card-body inner-box">
+              <div class="row">
+                <div class="col">
+                  <label for="first_name"><h6><i class="fa fa-user"></i> First Name </h6></label>
+                  <input id="first_name" type="text" class="form-control" ng-model="wl_to_edit.patient.first_name" placeholder="First name">
+                </div>
+                <div class="col">
+                  <label for="last_name"><h6><i class="fa fa-user"></i> Last Name</h6></label>
+                  <input id="last_name" type="text" class="form-control" ng-model="wl_to_edit.patient.last_name" placeholder="Last name">
+                </div>
+              </div>
+              <div class="row">
+                <div class="col">
+                  <label for="patient_id"><h6><i class="fa fa-id-badge"></i> Patient Id</h6></label>
+                  <input id="patient_id" type="text" class="form-control" ng-model="wl_to_edit.patient.patient_id" placeholder="Patient Id">
+                </div>
+                <div class="col">
+                  <label for="gender"><h6><i class="fa fa-male"></i><i class="fa fa-female"></i> Gender</h6></label>
+                  <br>
+                  <label class="radio-inline"><input type="radio" name="gender" value="Male" ng-model="wl_to_edit.patient.gender"><h6>Male</h6></label>
+                  <label class="radio-inline"><input type="radio" name="gender" value="Female" ng-model="wl_to_edit.patient.gender"><h6>Female</h6></label>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col">
+                  <label for="dob"><h6><i class="fa fa-calendar-alt"></i> Date of Birth</h6></label>
+                  <p class="input-group">
+                    <input type="text" class="form-control" uib-datepicker-popup="{{format}}" ng-model="wl_to_edit.patient.dob" is-open="popup1.opened" datepicker-options="dateOptions" ng-required="true" close-text="Close" alt-input-formats="altInputFormats" />
+                    <span class="input-group-btn">
+                      <button type="button" class="btn btn-default" ng-click="open1()"><i class="fas fa-calendar"></i></button>
+                    </span>
+                  </p>
+                </div>
+                <div class="col">
+                  <label for="weight"><h6><i class="fa fa-weight"></i> Weight</h6></label>
+                  <input id="weight" type="text" class="form-control" ng-model="wl_to_edit.patient.weight" placeholder="Weight">
+                </div>
+                <div class="col">
+                  <label for="size"><h6><i class="fa fa-tape"></i> Size</h6></label>
+                  <input id="size" type="text" class="form-control" ng-model="wl_to_edit.patient.patient_size" placeholder="Weight">
+                </div>
+              </div>
+              <br>
+              <div class="row">
+                <div class="col">
+                  <a href="#" class="btn btn-primary" data-toggle="modal" data-target="#patientModal">{[{action}]} Patient</a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-header" id="isr">
+            <div class="row">
+              <div class="col">
+                <button class="btn btn-outline-dark" data-toggle="collapse" data-target="#isrForm" aria-expanded="false" aria-controls="isrForm">
+                  Imaging Service Request
+                </button>
+              </div>
+              <div class="col-align-self-end" style="margin-right:20px;">
+                <i color="green" class="green fas fa-check fa-lg" style="color:green;"> </i>
+              </div>
+            </div>
+          </div>
+          <div id="isrForm" class="collapse" aria-labelledby="isr" data-parent="#accordion">
+            <div class="card-body inner-box" >
+              <div class="row">
+              <div class="col">
+                  <label for="first_name"><h6><i class="fa fa-sort-numeric-up"></i> Accession Number</h6></label>
+                  <input id="first_name" type="text" class="form-control" ng-model="wl_to_edit.isr.accession_number" placeholder="Accession Number">
+              </div>
+              <div class="col">
+                <label for="first_name"><h6><i class="fa fa-user-md"></i> Requesting Physician</h6></label>
+                <input type="text" class="form-control" ng-model="wl_to_edit.isr.requesting_physician" placeholder="Requesting Physician">
+              </div>
+              </div>
+              <div class="row">
+                <div class="col-sm-6">
+                   <label for="first_name"><h6><i class="fa fa-user-md"></i> Referring Pyhsician</h6></label>
+                   <input id="first_name" type="text" class="form-control" ng-model="wl_to_edit.isr.referring_physician" placeholder="Referring Pyhsician">
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-header" id="schedule">
+            <div class="row">
+              <div class="col">
+                <button class="btn btn-outline-dark" data-toggle="collapse" data-target="#scheduleForm" aria-expanded="false" aria-controls="scheduleForm">
+                  Schedule
+                </button>
+              </div>
+              <div class="col-align-self-end" style="margin-right:20px;">
+                <i color="green" class="green fas fa-check fa-lg" style="color:green;"> </i>
+              </div>
+            </div>
+          </div>
+          <div id="scheduleForm" class="collapse" aria-labelledby="schedule" data-parent="#accordion">
+            <div class="card-body inner-box">
+              <div class="row">
+                <div class="col-sm-4">
+                  <label for="first_name"><h6><i class="fa fa-clock"></i> Scheduled Date</h6></label>
+                  <p class="input-group">
+                    <input type="text" class="form-control" uib-datepicker-popup="{{format}}" ng-model="wl_to_edit.sps.start_date" is-open="popup2.opened" datepicker-options="dateOptions" ng-required="true" close-text="Close" alt-input-formats="altInputFormats" />
+                    <span class="input-group-btn">
+                      <button type="button" class="btn btn-default" ng-click="open2()"><i class="fas fa-calendar"></i></button>
+                    </span>
+                  </p>
+                </div>
+                <div class="col">
+                  <div uib-timepicker ng-model="mytime" hour-step="1" minute-step="1" show-meridian="false"></div>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col">
+                  <label for="first_name"><h6><i class="fa fa-hospital" ></i> Station Name</h6></label>
+                  <input type="text" class="form-control" ng-model="wl_to_edit.sps.station_name" placeholder="Station Name">
+                </div>
+                <div class="col">
+                  <label for="first_name"><h6><i class="fa fa-heading" ></i> Station AE Title</h6></label>
+                  <input id="first_name" type="text" class="form-control" ng-model="wl_to_edit.sps.station_aet" placeholder="Station AE Title">
+                </div>
+                <div class="col">
+                  <label for="first_name"><h6><i class="fa fa-x-ray" ></i> Modality</h6></label>
+                  <input id="first_name" type="text" class="form-control" ng-model="wl_to_edit.sps.modality" placeholder="Modality">
+                </div>
+              </div>
+              <br>
+              <div class="row">
+                <div class="col">
+                  <a href="#" class="btn btn-primary" data-toggle="modal" data-target="#stationModal">{[{action}]} Station</a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-header" id="procedure">
+            <div class="row">
+              <div class="col">
+                <button href="#" class="btn btn-outline-dark" data-toggle="collapse" data-target="#procedureForm" aria-expanded="false" aria-controls="procedureForm">
+                  Procedure
+                </button>
+              </div>
+              <div class="col-align-self-end" style="margin-right:20px;">
+                <i color="green" class="green fas fa-check fa-lg" style="color:green;"> </i>
+              </div>
+            </div>
+          </div>
+          <div id="procedureForm" class="collapse" aria-labelledby="schedule" data-parent="#accordion">
+            <div class="card-body inner-box">
+              <div class="row">
+                <div class="col-sm-6">
+                  <label for="first_name"><h6><i class="fa fa-procedures"></i> Requested Procedure</h6></label>
+                  <input type="text" class="form-control" ng-model="wl_to_edit.proc_info.requested_proc_desc" placeholder="Procudure">
+                </div>
+              </div>
+              <br>
+              <div class="row">
+                <div class="col">
+                  <a href="#" class="btn btn-primary" data-toggle="modal" data-target="#procedureModal">{[{action}]} Procedure</a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <hr>
+      <br>
+      <div class="row">
+        <div class="col">
+          <a href="#" class="btn btn-success" ng-click="save()">Save</a>
+          <a href="#" class="btn btn-danger" ng-click="cancel()">Cancel</a>
+        </div>
+      </div>
+    </form>
 </div>
-</div>
-<div class="p-3 mb-2 bg-light text-dark">
-  <div class="dropdown-divider"></div>
-  <h4> Imaging Service Request <h4>
-
-<div class="row">
-<div class="col">
-   <label for="first_name"><h6><i class="fa fa-sort-numeric-up"></i> Accession Number</h6></label>
-   <input id="first_name" type="text" class="form-control" ng-model="wl_to_edit.isr.accession_number" placeholder="Accession Number">
-</div>
-<div class="col">
-  <label for="first_name"><h6><i class="fa fa-user-md"></i> Requesting Physician</h6></label>
-  <input type="text" class="form-control" ng-model="wl_to_edit.isr.requesting_physician" placeholder="Requesting Physician">
-</div>
-</div>
-<div class="row">
-<div class="col-sm-6">
-   <label for="first_name"><h6><i class="fa fa-user-md"></i> Referring Pyhsician</h6></label>
-   <input id="first_name" type="text" class="form-control" ng-model="wl_to_edit.isr.referring_physician" placeholder="Referring Pyhsician">
-</div>
-</div>
-</div>
-<div class="p-3 mb-2 bg-light text-dark">
-<div class="dropdown-divider"></div>
-<h4> Schedule <h4>
-
-<div class="row">
-<div class="col-sm-4">
- <label for="first_name"><h6><i class="fa fa-clock"></i> Scheduled Date</h6></label>
- <p class="input-group">
-      <input type="text" class="form-control" uib-datepicker-popup="{{format}}" ng-model="wl_to_edit.sps.start_date" is-open="popup2.opened" datepicker-options="dateOptions" ng-required="true" close-text="Close" alt-input-formats="altInputFormats" />
-      <span class="input-group-btn">
-        <button type="button" class="btn btn-default" ng-click="open2()"><i class="fas fa-calendar"></i></button>
-      </span>
- </p>
-</div>
-<div class="col">
-  <div uib-timepicker ng-model="mytime" hour-step="1" minute-step="1" show-meridian="false"></div>
-</div>
-</div>
-<div class="row">
-<div class="col">
-<label for="first_name"><h6><i class="fa fa-hospital" ></i> Station Name</h6></label>
-<input type="text" class="form-control" ng-model="wl_to_edit.sps.station_name" placeholder="Station Name">
-</div>
-<div class="col">
- <label for="first_name"><h6><i class="fa fa-heading" ></i> Station AE Title</h6></label>
- <input id="first_name" type="text" class="form-control" ng-model="wl_to_edit.sps.station_aet" placeholder="Station AE Title">
-</div>
-<div class="col">
- <label for="first_name"><h6><i class="fa fa-x-ray" ></i> Modality</h6></label>
- <input id="first_name" type="text" class="form-control" ng-model="wl_to_edit.sps.modality" placeholder="Modality">
-</div>
-</div>
-<br>
-<div class="row">
-  <div class="col">
-    <a href="#" class="btn btn-primary" data-toggle="modal" data-target="#stationModal">{[{action}]} Station</a>
-  </div>
-</div>
-<!-- <div class="dropdown-divider"></div> -->
-</div>
-<div class="p-3 mb-2 bg-light text-dark">
-<hr>
-<h4> Procedure <h4>
-  <div class="row">
-  <div class="col-sm-6">
-  <label for="first_name"><h6><i class="fa fa-procedures"></i> Requested Procedure</h6></label>
-  <input type="text" class="form-control" ng-model="wl_to_edit.proc_info.requested_proc_desc" placeholder="Procudure">
-  </div>
-</div>
-  <br>
-  <div class="row">
-  <div class="col">
-    <a href="#" class="btn btn-primary" data-toggle="modal" data-target="#procedureModal">{[{action}]} Procedure</a>
-  </div>
-</div>
-</div>
-<hr>
-<br>
-<div class="row">
-  <div class="col">
-    <a href="#" class="btn btn-success" ng-click="save()">Save</a>
-    <a href="#" class="btn btn-danger" ng-click="cancel()">Cancel</a>
-  </div>
-</div>
-
-</div>
-</form>
-<div>
-
 <div class="modal fade" id="procedureModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
     <div class="modal-content">
@@ -365,7 +417,7 @@
     </div>
   </div>
  </div>
-  <div class="modal fade" id="patientModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+<div class="modal fade" id="patientModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
       <div class="modal-content">
         <div class="modal-header">

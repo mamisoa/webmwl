@@ -175,6 +175,12 @@ mwlapp.controller('MwlListController', ['$scope','$http', function($scope, $http
     $scope.title = 'Edit'
     $scope.action = 'Change'
   }
+  $scope.init_validations = function () {
+    $scope.patient_valid = false
+    $scope.isr_valid = false
+    $scope.schedule_valid = false
+    $scope.procedure_valid = false
+  }
   $scope.addwl = function () {
     // $scope.wl_to_edit = $scope.mwlItems[index]
     $scope.initwl()
@@ -317,6 +323,7 @@ mwlapp.controller('MwlListController', ['$scope','$http', function($scope, $http
     proc_info['requested_proc_desc'] = $scope.procedures[index].procedure_description
     proc_info['proc_id'] = $scope.procedures[index].procedure_id
     $('#procedureModal').modal('hide')
+
   }
   $scope.stationSelected = function (index) {
     var sps_info = $scope.wl_to_edit['sps']
@@ -324,6 +331,10 @@ mwlapp.controller('MwlListController', ['$scope','$http', function($scope, $http
     sps_info['station_name'] = $scope.stations[index].name
     sps_info['modality'] = $scope.stations[index].modality
     $('#stationModal').modal('hide')
+    $('#scheduleForm').collapse('hide')
+    setTimeout(function() {
+      $('#procedureForm').collapse('show')
+    },500)
   }
   $scope.patientSelected = function (index) {
     var patient_info = $scope.wl_to_edit['patient']
@@ -335,6 +346,11 @@ mwlapp.controller('MwlListController', ['$scope','$http', function($scope, $http
     patient_info['weight'] = $scope.patients[index].weight
     patient_info['patient_size'] = $scope.patients[index].patient_size
     $('#patientModal').modal('hide')
+    $('#patientForm').collapse('hide')
+    //$('#isrForm').collapse({'toggle':true, 'parent':'#accordion'})
+    setTimeout(function() {
+      $('#isrForm').collapse('show')
+    },500)
   }
   // Initial load
   $scope.loadMwlItems()
