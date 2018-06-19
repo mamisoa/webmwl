@@ -1,7 +1,7 @@
 {{extend 'layout.html'}}
 <script src="{{=URL('static','js/mwlapp.js')}}"></script>
 <div ng-app='mwlapp'>
-<main role="main" class="container" ng-controller="MwlListController" ng-cloak>
+<main role="main" class="container" ng-controller="MwlListController as ctrl" ng-cloak>
   <div ng-if="show_list">
   <h2> Modality Worklist </h2>
 
@@ -130,7 +130,7 @@
 <div ng-if="show_edit">
     <h2> {[{title}]} Modality Worklist </h2>
     <p> You can edit the schedule and Image Service Request details. Editing Patient details will only effect the changes for this MWL item. </p>
-    <form>
+    <form class="needs-validation" name="ctrl.mwlForm" novalidate>
       <div id="accordion">
         <div class="card">
           <div class="card-header" id="patient">
@@ -150,18 +150,28 @@
               <div class="row">
                 <div class="col">
                   <label for="first_name"><h6><i class="fa fa-user"></i> First Name </h6></label>
-                  <input id="first_name" type="text" class="form-control" ng-model="wl_to_edit.patient.first_name" placeholder="First name">
+                  <input name="first_name" type="text" class="form-control" ng-model="wl_to_edit.patient.first_name" placeholder="First name" required>
+                  <span ng-show="ctrl.mwlForm.first_name.$invalid && save_requested" style="color:red;">
+                      Please select a valid Last Name
+                  </span>
                 </div>
                 <div class="col">
                   <label for="last_name"><h6><i class="fa fa-user"></i> Last Name</h6></label>
-                  <input id="last_name" type="text" class="form-control" ng-model="wl_to_edit.patient.last_name" placeholder="Last name">
+                  <input name="last_name" type="text" class="form-control" ng-model="wl_to_edit.patient.last_name" placeholder="Last name" required>
+                  <span ng-show="ctrl.mwlForm.last_name.$invalid && save_requested" style="color:red;">
+                      Please select a valid Last Name
+                  </span>
                 </div>
               </div>
               <div class="row">
                 <div class="col">
                   <label for="patient_id"><h6><i class="fa fa-id-badge"></i> Patient Id</h6></label>
-                  <input id="patient_id" type="text" class="form-control" ng-model="wl_to_edit.patient.patient_id" placeholder="Patient Id">
+                  <input name="patient_id" type="text" class="form-control" ng-model="wl_to_edit.patient.patient_id" placeholder="Patient Id" required>
+                  <span ng-show="ctrl.mwlForm.patient_id.$invalid && save_requested" style="color:red;">
+                      Please select a valid patient Id
+                  </span>
                 </div>
+
                 <div class="col">
                   <label for="gender"><h6><i class="fa fa-male"></i><i class="fa fa-female"></i> Gender</h6></label>
                   <br>
@@ -173,9 +183,12 @@
                 <div class="col">
                   <label for="dob"><h6><i class="fa fa-calendar-alt"></i> Date of Birth</h6></label>
                   <p class="input-group">
-                    <input type="text" class="form-control" uib-datepicker-popup="{{format}}" ng-model="wl_to_edit.patient.dob" is-open="popup1.opened" datepicker-options="dateOptions" ng-required="true" close-text="Close" alt-input-formats="altInputFormats" />
+                    <input name="dob" type="text" class="form-control" uib-datepicker-popup="{{format}}" ng-model="wl_to_edit.patient.dob" is-open="popup1.opened" datepicker-options="dateOptions" ng-required="true" close-text="Close" alt-input-formats="altInputFormats" required/>
                     <span class="input-group-btn">
                       <button type="button" class="btn btn-default" ng-click="open1()"><i class="fas fa-calendar"></i></button>
+                    </span>
+                    <span ng-show="ctrl.mwlForm.dob.$invalid && save_requested" style="color:red;">
+                        Please select a valid date of birth
                     </span>
                   </p>
                 </div>
@@ -215,17 +228,26 @@
               <div class="row">
               <div class="col">
                   <label for="first_name"><h6><i class="fa fa-sort-numeric-up"></i> Accession Number</h6></label>
-                  <input id="first_name" type="text" class="form-control" ng-model="wl_to_edit.isr.accession_number" placeholder="Accession Number">
+                  <input name="accession_number" type="text" class="form-control" ng-model="wl_to_edit.isr.accession_number" placeholder="Accession Number">
+                  <span ng-show="ctrl.mwlForm.accession_number.$invalid && save_requested" style="color:red;">
+                      Please select a valid Accession Number
+                  </span>
               </div>
               <div class="col">
                 <label for="first_name"><h6><i class="fa fa-user-md"></i> Requesting Physician</h6></label>
-                <input type="text" class="form-control" ng-model="wl_to_edit.isr.requesting_physician" placeholder="Requesting Physician">
+                <input name="requesting_physician" type="text" class="form-control" ng-model="wl_to_edit.isr.requesting_physician" placeholder="Requesting Physician">
+                <span ng-show="ctrl.mwlForm.requesting_physician.$invalid && save_requested" style="color:red;">
+                    Please select a valid Requesting Physician
+                </span>
               </div>
               </div>
               <div class="row">
                 <div class="col-sm-6">
                    <label for="first_name"><h6><i class="fa fa-user-md"></i> Referring Pyhsician</h6></label>
-                   <input id="first_name" type="text" class="form-control" ng-model="wl_to_edit.isr.referring_physician" placeholder="Referring Pyhsician">
+                   <input name="referring_physician" type="text" class="form-control" ng-model="wl_to_edit.isr.referring_physician" placeholder="Referring Pyhsician">
+                   <span ng-show="ctrl.mwlForm.referring_physician.$invalid && save_requested" style="color:red;">
+                       Please select a valid Referring Physician
+                   </span>
                 </div>
               </div>
             </div>
@@ -263,15 +285,24 @@
               <div class="row">
                 <div class="col">
                   <label for="first_name"><h6><i class="fa fa-hospital" ></i> Station Name</h6></label>
-                  <input type="text" class="form-control" ng-model="wl_to_edit.sps.station_name" placeholder="Station Name">
+                  <input name="stationname" type="text" class="form-control" ng-model="wl_to_edit.sps.station_name" placeholder="Station Name" required>
+                  <span ng-show="ctrl.mwlForm.stationname.$invalid && save_requested" style="color:red;">
+                      Please select a valid Station Name
+                  </span>
                 </div>
                 <div class="col">
                   <label for="first_name"><h6><i class="fa fa-heading" ></i> Station AE Title</h6></label>
-                  <input id="first_name" type="text" class="form-control" ng-model="wl_to_edit.sps.station_aet" placeholder="Station AE Title">
+                  <input name="stationaet" type="text" class="form-control" ng-model="wl_to_edit.sps.station_aet" placeholder="Station AE Title" required>
+                  <span ng-show="ctrl.mwlForm.stationaet.$invalid && save_requested" style="color:red;">
+                      Please select a valid AE Title
+                  </span>
                 </div>
                 <div class="col">
                   <label for="first_name"><h6><i class="fa fa-x-ray" ></i> Modality</h6></label>
-                  <input id="first_name" type="text" class="form-control" ng-model="wl_to_edit.sps.modality" placeholder="Modality">
+                  <input name="modality" type="text" class="form-control" ng-model="wl_to_edit.sps.modality" placeholder="Modality" required>
+                  <span ng-show="ctrl.mwlForm.modality.$invalid && save_requested" style="color:red;">
+                      Please select a valid modality
+                  </span>
                 </div>
               </div>
               <br>
@@ -301,7 +332,10 @@
               <div class="row">
                 <div class="col-sm-6">
                   <label for="first_name"><h6><i class="fa fa-procedures"></i> Requested Procedure</h6></label>
-                  <input type="text" class="form-control" ng-model="wl_to_edit.proc_info.requested_proc_desc" placeholder="Procudure">
+                  <input name="procedure" type="text" class="form-control" ng-model="wl_to_edit.proc_info.requested_proc_desc" placeholder="Procudure" required>
+                  <span ng-show="ctrl.mwlForm.procedure.$invalid && save_requested" style="color:red;">
+                      Please select a valid procedure
+                  </span>
                 </div>
               </div>
               <br>

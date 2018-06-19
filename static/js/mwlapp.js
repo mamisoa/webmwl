@@ -7,6 +7,7 @@ mwlapp.config(function($interpolateProvider) {
 });
 
 mwlapp.controller('MwlListController', ['$scope','$http', function($scope, $http) {
+  var vm = this
   $scope.selectedStatus = 'SCHEDULED'
   $scope.selectedDate = 'TODAY'
   $scope.fltr = {}
@@ -174,6 +175,7 @@ mwlapp.controller('MwlListController', ['$scope','$http', function($scope, $http
     $scope.show_edit = true
     $scope.title = 'Edit'
     $scope.action = 'Change'
+    $scope.save_requested = false
   }
   $scope.init_validations = function () {
     $scope.patient_valid = false
@@ -188,6 +190,7 @@ mwlapp.controller('MwlListController', ['$scope','$http', function($scope, $http
     $scope.show_edit = true
     $scope.title = 'Add'
     $scope.action = 'Select'
+    $scope.save_requested = false
   }
   $scope.initwl = function () {
     $scope.wl_to_edit = {}
@@ -234,7 +237,52 @@ mwlapp.controller('MwlListController', ['$scope','$http', function($scope, $http
     $scope.show_edit = false
     $scope.loadMwlItems()
   }
+  $scope.checkIsrFormValid = function () {
+    valid = vm.mwlForm.accession_number.$valid &&
+      vm.mwlForm.requesting_physician.$valid &&
+      vm.mwlForm.referring_physician.$valid
+    if (!valid) {
+      $('#isrForm').collapse('show')
+    }
+    return valid
+  }
+  $scope.checkScheduleFormValid = function () {
+    valid = vm.mwlForm.stationname.$valid &&
+      vm.mwlForm.stationaet.$valid &&
+      vm.mwlForm.modality.$valid
+    if (!valid) {
+      $('#scheduleForm').collapse('show')
+    }
+    return valid
+  }
+  $scope.checkRequestFormValid = function () {
+    valid = vm.mwlForm.procedure.$valid
+    if (!valid) {
+      $('#procedureForm').collapse('show')
+    }
+    return valid
+  }
+  $scope.checkPatientFormValid = function () {
+    valid = vm.mwlForm.first_name.$valid &&
+      vm.mwlForm.last_name.$valid &&
+      vm.mwlForm.patient_id.$valid &&
+      vm.mwlForm.dob.$valid
+    if (!valid) {
+      $('#patientForm').collapse('show')
+    }
+    return valid
+  }
+  $scope.validateForm = function() {
+    return $scope.checkPatientFormValid() &&
+      $scope.checkIsrFormValid() &&
+      $scope.checkScheduleFormValid() &&
+      $scope.checkRequestFormValid()
+  }
   $scope.save = function () {
+    $scope.save_requested = true
+    if (!$scope.validateForm()) {
+      return
+    }
     // Fix dates
     $scope.wl_to_edit['sps']['start_date'] = $scope.formatDateDicom($scope.wl_to_edit['sps']['start_date'])
     $scope.wl_to_edit['patient']['dob'] = $scope.formatDateDicom($scope.wl_to_edit['patient']['dob'])
