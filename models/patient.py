@@ -7,4 +7,6 @@ db.define_table('patient',
                Field('weight'),
                Field('patient_size'),
                Field('patient_id'),
+               Field('medical_alerts'),
+               Field('allergies'),
                auth.signature)

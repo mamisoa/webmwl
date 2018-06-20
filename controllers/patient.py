@@ -5,18 +5,20 @@ def index():
 	redirect(URL('listpatient'))
 
 def cal_age(born):
-	from datetime import datetime
-	age = (datetime.now().date() - born).days / 365 
-	age_str = str(age) + ' years'
-	if age < 1:
-		age = (datetime.now().date() - born).days / 30
-		age_str = str(age) + ' months'
+	try:
+		from datetime import datetime
+		age = (datetime.now().date() - born).days / 365 
+		age_str = str(age) + ' years'
 		if age < 1:
-			age = (datetime.now().date() - born).days
-			age_str = str(age) + ' days'
+			age = (datetime.now().date() - born).days / 30
+			age_str = str(age) + ' months'
 			if age < 1:
-				age_str = "Invalid age"
-
+				age = (datetime.now().date() - born).days
+				age_str = str(age) + ' days'
+				if age < 1:
+					age_str = "Invalid age"
+	except:
+		age_str = "Invalid age"
 	return age_str
 
 def listpatient():
@@ -58,11 +60,14 @@ def addpatient():
 	weight = request.vars.weight
 	patient_size = request.vars.patient_size
 	patient_id = request.vars.patient_id
+	medical_alerts = request.vars.medical_alerts
+	allergies = request.vars.allergies
 	if len(request.vars)>0:
 		db.patient.insert(first_name=first_name, last_name=last_name,
 					birth_date=birth_date, gender=gender,
 					patient_size=patient_size, weight=weight, 
-					patient_id = patient_id)
+					patient_id = patient_id, medical_alerts=medical_alerts,
+					allergies=allergies)
 		redirect(URL('listpatient'))
 	return locals()
 
@@ -86,6 +91,8 @@ def editpatient():
 			patient_size=request.vars.patient_size,
 			weight=request.vars.weight,
 			birth_date=request.vars.birth_date,
-			patient_id = request.vars.patient_id)
+			patient_id = request.vars.patient_id,
+			medical_alerts=request.vars.medical_alerts,
+			allergies=request.vars.allergies)
 		redirect(URL('listpatient'))
 		return locals()
