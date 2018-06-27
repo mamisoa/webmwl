@@ -32,6 +32,8 @@ mwlapp.controller('MwlListController', ['$scope','$http', function($scope, $http
   }
   $scope.currentPage = 1
   $scope.pageSize = 10
+  $scope.totalCount = 0
+  $scope.pages = 1
 
   $scope.mwlItems = []
 
@@ -62,6 +64,9 @@ mwlapp.controller('MwlListController', ['$scope','$http', function($scope, $http
   $scope.formatDateDicom = function (date) {
     return date.getFullYear() + ('0' + (date.getMonth() + 1)).slice(-2) + ('0' + date.getDate()).slice(-2)
   }
+  $scope.formatTimeDicom = function (date) {
+    return  ('0' + (date.getHours())).slice(-2) + ('0' + date.getMinutes()).slice(-2) + ('0' + date.getSeconds()).slice(-2)
+  }
   var getAge = function (dateString) {
       var today = new Date()
       var birthDate = new Date(dateString)
@@ -87,17 +92,25 @@ mwlapp.controller('MwlListController', ['$scope','$http', function($scope, $http
     var promise = $http.get('get_mwl',qparams)
     promise.then (function (response) {
       $scope.mwlItems.length = 0
-      $scope.mwlItems.push.apply($scope.mwlItems,response.data['result'])
+      $scope.mwlItems.push.apply($scope.mwlItems,response.data['result']['items'])
       for (i=0; i< $scope.mwlItems.length; i++) {
         $scope.mwlItems[i]['patient']['age'] = getAge($scope.mwlItems[i]['patient']['dob'])
       }
-      console.log(data)
+      $scope.totalCount = response.data['result']['count']
+      $scope.pages = Math.floor($scope.totalCount / $scope.pageSize)
+      if ($scope.totalCount % $scope.pageSize > 0) {
+        $scope.pages = $scope.pages + 1
+      }
+      // console.log(data)
       $scope.loading = false
     })
     .catch( function(error) {
       $scope.loading = false
       console.log('Error ='+ error)
     })
+  }
+  $scope.getPages = function () {
+    return new Array($scope.pages)
   }
   $scope.selectModality = function (modality) {
     $scope.selectedModality = modality
@@ -171,6 +184,13 @@ mwlapp.controller('MwlListController', ['$scope','$http', function($scope, $http
     $scope.wl_to_edit = $scope.mwlItems[index]
     $scope.wl_to_edit['patient']['dob'] = new Date($scope.wl_to_edit['patient']['dob'])
     $scope.wl_to_edit['sps']['start_date'] = new Date($scope.wl_to_edit['sps']['start_date'])
+    var st_time = new Date()
+    if ($scope.wl_to_edit['sps']['start_time'] !== '') {
+      var tmString = $scope.wl_to_edit['sps']['start_time']
+      st_time.setHours(parseInt(tmString.substring(0,2)))
+      st_time.setMinutes(parseInt(tmString.substring(2,4)))
+    }
+    $scope.wl_to_edit['sps']['start_time'] = st_time
     $scope.show_list = false
     $scope.show_edit = true
     $scope.title = 'Edit'
@@ -201,7 +221,9 @@ mwlapp.controller('MwlListController', ['$scope','$http', function($scope, $http
       'dob': '',
       'weight': '',
       'patient_id': '',
-      'patient_size':''
+      'patient_size':'',
+      'med_alerts':'',
+      'allergies': ''
       }
     $scope.wl_to_edit['isr'] = {
           'accession_number': '',
@@ -213,14 +235,27 @@ mwlapp.controller('MwlListController', ['$scope','$http', function($scope, $http
           'station_aet': '',
           'station_name': '',
           'start_date':new Date(),
+          'start_time': new Date(),
           'sps_id': '',
           'sps_desc':'',
-          'status':'SCHEDULED'
+          'status':'SCHEDULED',
+          'contrast_agent': '',
+          'pre_meds':'',
+          'operator':'',
+          'comments':'',
+          'protocol_code': '',
+          'protocol_code_meaning': '',
+          'protocol_code_scheme_designator': ''
       }
     $scope.wl_to_edit['proc_info'] = {
           'requested_proc_desc': '',
           'proc_id':'',
-          'study_uid':''
+          'study_uid':'',
+          'proc_priority': 'ROUTINE',
+          'request_reason': '',
+          'procedure_code': '',
+          'procedure_code_meaning': '',
+          'proc_scheme_designator':''
       }
   }
   // Add Edit MwlListController
@@ -229,6 +264,7 @@ mwlapp.controller('MwlListController', ['$scope','$http', function($scope, $http
   $scope.procSearch=''
   $scope.stationSearch=''
   $scope.patientSearch=''
+  $scope.priorities = ['STAT','ROUTINE', 'LOW', 'HIGH', 'MEDIUM']
   $scope.open2 = function() {
     $scope.popup2.opened = true;
   }
@@ -286,6 +322,7 @@ mwlapp.controller('MwlListController', ['$scope','$http', function($scope, $http
     // Fix dates
     $scope.wl_to_edit['sps']['start_date'] = $scope.formatDateDicom($scope.wl_to_edit['sps']['start_date'])
     $scope.wl_to_edit['patient']['dob'] = $scope.formatDateDicom($scope.wl_to_edit['patient']['dob'])
+    $scope.wl_to_edit['sps']['start_time'] = $scope.formatTimeDicom($scope.wl_to_edit['sps']['start_time'])
     var promise = $http.post('save_mwl',$scope.wl_to_edit)
     promise.then ( function(result) {
       console.log('Saved Successfully')
@@ -370,6 +407,14 @@ mwlapp.controller('MwlListController', ['$scope','$http', function($scope, $http
     var proc_info = $scope.wl_to_edit['proc_info']
     proc_info['requested_proc_desc'] = $scope.procedures[index].procedure_description
     proc_info['proc_id'] = $scope.procedures[index].procedure_id
+    proc_info['procedure_code'] = $scope.procedures[index].procedure_code
+    proc_info['procedure_code_meaning'] = $scope.procedures[index].procedure_code_meaning
+    proc_info['proc_scheme_designator'] = $scope.procedures[index].procedure_code_scheme_designator
+    // Fill sps protocol
+    var sps = $scope.wl_to_edit['sps']
+    sps['protocol_code'] = $scope.procedures[index].protocol_code
+    sps['protocol_code_meaning'] = $scope.procedures[index].protocol_code_meaning
+    sps['protocol_code_scheme_designator'] = $scope.procedures[index].protocol_code_scheme_designator
     $('#procedureModal').modal('hide')
 
   }
@@ -399,6 +444,17 @@ mwlapp.controller('MwlListController', ['$scope','$http', function($scope, $http
     setTimeout(function() {
       $('#isrForm').collapse('show')
     },500)
+  }
+  // pagination
+  $scope.pageChanged = function (index) {
+    $scope.currentPage = index
+    $scope.loadMwlItems()
+  }
+  $scope.prevPage = function () {
+    $scope.pageChanged($scope.currentPage -1)
+  }
+  $scope.nextPage = function () {
+    $scope.pageChanged($scope.currentPage + 1)
   }
   // Initial load
   $scope.loadMwlItems()

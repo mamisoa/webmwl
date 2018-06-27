@@ -9,6 +9,9 @@ class MwlInterface:
         'status': '00400100.00400020',
         'scheduled_date': '00400100.00400002'
     }
+    def __init__(self, arc_config):
+        self.BASE_URL = 'http://' + arc_config['host'] + ':' + arc_config['port'] + '/dcm4chee-arc/'
+        self.AET_URL = self.BASE_URL + 'aets/' + arc_config['ae_title']
     def get_aes(self):
         aes_url = self.BASE_URL + 'aes'
         response = requests.get(aes_url)
@@ -24,9 +27,7 @@ class MwlInterface:
     def map_field_to_dicom_tag(self, field, search):
         if field == 'patient_name':
             return '00100010'
-
-    def get_mwl(self, filter=None):
-        search = {}
+    def create_filter(self, search, filter):
         if filter is not None:
             if 'page_size' in filter:
                 search['limit'] = filter['page_size']
@@ -41,8 +42,32 @@ class MwlInterface:
                 search['fuzzymatching'] = 'true'
             if 'modality' in filter and filter['modality'] != 'ALL':
                 search[self.DCM_FIELD_MAP['modality']] = filter['modality']
-
-        mwl_url = self.BASE_URL + 'aets/DCM4CHEE/rs/mwlitems'
+    def get_count(self, filter):
+        search = {}
+        self.create_filter(search,filter)
+        mwl_url = self.AET_URL + '/rs/mwlitems/count'
+        response = requests.get(mwl_url, params=search)
+        if response.status_code == 204 :
+            return {'count':0}
+        if response.status_code >= 400:
+            print (response.text)
+            return {'count':0}
+        count = response.json()
+        return count
+    def get_mwl(self, filter=None):
+        count = self.get_count(filter)
+        print (str(count))
+        if count['count'] == 0:
+            print "Count has returned as zero!!"
+            return {
+                'count': 0,
+                'items': []
+            }
+        print ('Total number of results = '+ str(count['count']))
+        search = {'includefield': 'all'}
+        self.create_filter(search,filter)
+        #mwl_url = self.BASE_URL + 'aets/DCM4CHEE/rs/mwlitems'
+        mwl_url = self.AET_URL + '/rs/mwlitems'
         #search['00400100.00080060'] = 'MR'
         print (search)
         response = requests.get(mwl_url, params=search)
@@ -61,16 +86,21 @@ class MwlInterface:
             #print mwl_item
             mwl_items.append(mwl_item)
         #print unicode(mwl_items)
-        return mwl_items
+        return {
+            'count': count['count'],
+            'items': mwl_items
+            }
     def del_mwl(self, studyUid, spsId):
-        mwl_url = self.BASE_URL + 'aets/DCM4CHEE/rs/mwlitems/' + studyUid + '/' + spsId
+        #mwl_url = self.BASE_URL + 'aets/DCM4CHEE/rs/mwlitems/' + studyUid + '/' + spsId
+        mwl_url = self.AET_URL + '/rs/mwlitems/' + studyUid + '/' + spsId
         requests.delete(mwl_url)
 
     def create_mwl(self, sample_wl_folder, worklist):
         wl_ds = from_worklist_json(sample_wl_folder, worklist)
         wl_json = convert_dataset_to_json(wl_ds)
         print (wl_json)
-        mwl_url = self.BASE_URL + 'aets/DCM4CHEE/rs/mwlitems'
+        #mwl_url = self.BASE_URL + 'aets/DCM4CHEE/rs/mwlitems'
+        mwl_url = self.AET_URL + '/rs/mwlitems'
         response = requests.post(mwl_url, json=wl_json)
         print unicode(response)
         print unicode(response.text)
@@ -79,7 +109,8 @@ class MwlInterface:
         wl_ds = from_worklist_get_patient_only(sample_wl_folder,worklist)
         wl_json = convert_dataset_to_json(wl_ds)
         print (wl_json)
-        mwl_url = self.BASE_URL + 'aets/DCM4CHEE/rs/patients/'+worklist['patient']['patient_id']
+        #mwl_url = self.BASE_URL + 'aets/DCM4CHEE/rs/patients/'+worklist['patient']['patient_id']
+        mwl_url = self.AET_URL + '/rs/patients/'+worklist['patient']['patient_id']
         response = requests.put(mwl_url, json=wl_json)
         print unicode(response)
         print unicode(response.text)
@@ -117,7 +148,11 @@ if __name__ == '__main__':
         'proc_id':'RP0001',
         'study_uid':'1.2.3.4.5.284928943.32434'
     }
-    arc_if = MwlInterface()
+    arc_if = MwlInterface({
+        'host': 'localhost',
+        'ae_title': 'DCM4CHEE',
+        'port': '8080'
+    })
     #arc_if.get_device('dcm4chee-arc')
     #print()
     #pid = arc_if.create_patient(mwl_item)

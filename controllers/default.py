@@ -13,6 +13,19 @@ def index():
     response.flash = T("Hello World")
     return dict(message=T('Welcome to web2py!'))
 
+def get_arc_config():
+    rows = db(db.arcconfig).select()
+    if len(rows) > 0:
+        return {
+            'host': rows[0]['arc_hostname'],
+            'ae_title': rows[0]['arc_ae_title'],
+            'port': rows[0]['arc_port']
+        }
+    return {
+        'host': 'localhost',
+        'ae_title': 'DCM4CHEE',
+        'port': '8080'
+    }
 def get_mwl():
     print(request.vars)
     print(request.vars.date)
@@ -27,7 +40,7 @@ def get_mwl():
     filter['modality'] = request.vars.modality
     filter['scheduled_date'] = request.vars.date.replace('-','')
     print (filter)
-    mwl = MwlInterface()
+    mwl = MwlInterface(get_arc_config())
     result = mwl.get_mwl(filter)
     print(result)
     return response.json({'result': result})
@@ -35,7 +48,7 @@ def get_mwl():
 def del_mwl():
     print(request.vars.studyUid)
     print(request.vars.spsId)
-    mwl = MwlInterface()
+    mwl = MwlInterface(get_arc_config())
     mwl.del_mwl(request.vars.studyUid,request.vars.spsId)
     return response.json({'result': 'success'})
 
@@ -43,10 +56,11 @@ def save_mwl():
     print(request.vars)
     worklist = simplejson.loads(request.body.read())
     print(worklist)
-    mwl = MwlInterface()
+    mwl = MwlInterface(get_arc_config())
     sample_wl_folder = os.path.join(request.folder, 'modules')
     result = mwl.create_patient_and_worklist(sample_wl_folder,worklist)
     return response.json(result)
+
 
 def get_stations():
     if request.vars.search_str:

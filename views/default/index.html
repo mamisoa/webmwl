@@ -1,5 +1,10 @@
 {{extend 'layout.html'}}
 <script src="{{=URL('static','js/mwlapp.js')}}"></script>
+<script>
+  window.FontAwesomeConfig = {
+    searchPseudoElements: true
+  }
+</script>
 <div ng-app='mwlapp'>
 <main role="main" class="container" ng-controller="MwlListController as ctrl" ng-cloak>
   <div ng-if="show_list">
@@ -114,14 +119,12 @@
   <div class="row">
     <nav aria-label="Page navigation example">
 <ul class="pagination justify-content-center">
-<li class="page-item disabled">
-  <a class="page-link" href="#" tabindex="-1">Previous</a>
+<li class="page-item" ng-class="{disabled : currentPage == 1}">
+  <a class="page-link" href="#" tabindex="-1" ng-click="prevPage()">Previous</a>
 </li>
-<li class="page-item active"><a class="page-link" href="#">1</a></li>
-<li class="page-item"><a class="page-link" href="#">2</a></li>
-<li class="page-item"><a class="page-link" href="#">3</a></li>
-<li class="page-item">
-  <a class="page-link" href="#">Next</a>
+<li ng-repeat="page in getPages() track by $index" class="page-item" ng-class="{active: currentPage == ($index + 1)}"><a class="page-link" href="#" ng-click="pageChanged($index + 1)">{[{$index + 1}]}</a></li>
+<li class="page-item" ng-class="{disabled : currentPage == pages}">
+  <a class="page-link" href="#" ng-click="nextPage()">Next</a>
 </li>
 </ul>
 </nav>
@@ -198,7 +201,17 @@
                 </div>
                 <div class="col">
                   <label for="size"><h6><i class="fa fa-tape"></i> Size</h6></label>
-                  <input id="size" type="text" class="form-control" ng-model="wl_to_edit.patient.patient_size" placeholder="Weight">
+                  <input id="size" type="text" class="form-control" ng-model="wl_to_edit.patient.patient_size" placeholder="Size">
+                </div>
+              </div>
+              <div class="row">
+                <div class="col">
+                  <label for="alerts"><h6><i class="fa fa-exclamation-triangle"></i> Medical Alerts</h6></label>
+                  <input id="alerts" type="text" class="form-control" ng-model="wl_to_edit.patient.med_alerts" placeholder="Medical alerts">
+                </div>
+                <div class="col">
+                  <label for="allergies"><h6><i class="fa fa-allergies"></i> Allergies</h6></label>
+                  <input id="allergies" type="text" class="form-control" ng-model="wl_to_edit.patient.allergies" placeholder="Allergies">
                 </div>
               </div>
               <br>
@@ -270,7 +283,7 @@
             <div class="card-body inner-box">
               <div class="row">
                 <div class="col-sm-4">
-                  <label for="first_name"><h6><i class="fa fa-clock"></i> Scheduled Date</h6></label>
+                  <label for="first_name"><h6><i class="fa fa-clock"></i> Scheduled Date & Time</h6></label>
                   <p class="input-group">
                     <input type="text" class="form-control" uib-datepicker-popup="{{format}}" ng-model="wl_to_edit.sps.start_date" is-open="popup2.opened" datepicker-options="dateOptions" ng-required="true" close-text="Close" alt-input-formats="altInputFormats" />
                     <span class="input-group-btn">
@@ -279,7 +292,7 @@
                   </p>
                 </div>
                 <div class="col">
-                  <div uib-timepicker ng-model="mytime" hour-step="1" minute-step="1" show-meridian="false"></div>
+                  <div uib-timepicker ng-model="wl_to_edit.sps.start_time" hour-step="1" minute-step="1" show-meridian="false"></div>
                 </div>
               </div>
               <div class="row">
@@ -305,10 +318,32 @@
                   </span>
                 </div>
               </div>
+
               <br>
               <div class="row">
                 <div class="col">
                   <a href="#" class="btn btn-primary" data-toggle="modal" data-target="#stationModal">{[{action}]} Station</a>
+                </div>
+              </div>
+              <br>
+              <div class="row">
+                <div class="col">
+                  <label for="first_name"><h6><i class="fa fa-prescription-bottle-alt" ></i> Requested Contrast Agent</h6></label>
+                  <input name="stationname" type="text" class="form-control" ng-model="wl_to_edit.sps.contrast_agent" placeholder="Contrast Agent">
+                </div>
+                <div class="col">
+                  <label for="first_name"><h6><i class="fa fa-pills" ></i> Premedications</h6></label>
+                  <input name="stationaet" type="text" class="form-control" ng-model="wl_to_edit.sps.pre_meds" placeholder="Medications">
+                </div>
+                <div class="col">
+                  <label for="first_name"><h6><i class="fa fa-user-md" ></i> Performing Physician</h6></label>
+                  <input name="modality" type="text" class="form-control" ng-model="wl_to_edit.sps.operator" placeholder="Operator">
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-sm-6">
+                  <label for="first_name"><h6><i class="fa fa-comments" ></i> Comments </h6></label>
+                  <input name="stationname" type="text" class="form-control" ng-model="wl_to_edit.sps.comments" placeholder="Comments">
                 </div>
               </div>
             </div>
@@ -329,6 +364,21 @@
           </div>
           <div id="procedureForm" class="collapse" aria-labelledby="schedule" data-parent="#accordion">
             <div class="card-body inner-box">
+              <div class="row">
+              <div class="col">
+                  <label for="first_name"><h6><i class="fa fa-ribbon"></i> Reason for Requested Procedure</h6></label>
+                  <input name="request_reason" type="text" class="form-control" ng-model="wl_to_edit.proc_info.request_reason" placeholder="Reason">
+
+              </div>
+              <div class="col">
+                <div class="form-group">
+                <label for="req_priority"><h6><i class="fa fa-shipping-fast"></i> Procedure priority</h6></label>
+                <select class="form-control" ng-model="wl_to_edit.proc_info.proc_priority" id="req_priority" name="procedure_priority">
+                  <option ng-repeat="priority in priorities" value="{[{priority}]}" ng-selected="priority === wl_to_edit.proc_info.proc_priority">{[{priority}]}</option>
+                </select>
+              </div>
+              </div>
+              </div>
               <div class="row">
                 <div class="col-sm-6">
                   <label for="first_name"><h6><i class="fa fa-procedures"></i> Requested Procedure</h6></label>

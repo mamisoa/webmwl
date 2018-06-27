@@ -60,6 +60,8 @@ def convert_dataset_to_json(ds):
                 val.append(convert_dataset_to_json(item))
         else:
             val = [elem.value]
+            if elem.VR == 'DS':
+                val=[float(elem.value)]
         json_obj[tag]={'vr':elem.VR,'Value':val}
     print 'Conversion complete ****'
     return json_obj
@@ -71,7 +73,9 @@ def fill_patient_info(ds, mwl_item):
     'dob': '',
     'weight': '',
     'patient_id': '',
-    'patient_size':''
+    'patient_size':'',
+    'med_alerts': '',
+    'allergies': ''
     }
 
     if 'PatientName' in ds:
@@ -88,6 +92,20 @@ def fill_patient_info(ds, mwl_item):
     if 'PatientSex' in ds:
         val = ds.PatientSex
         mwl_item['patient']['gender'] = 'Male' if val == 'M' else 'Female'
+    if 'MedicalAlerts' in ds:
+        val = ds.MedicalAlerts
+        mwl_item['patient']['med_alerts'] = val
+    if 'Allergies' in ds:
+        val = ds.Allergies
+        mwl_item['patient']['allergies'] = val
+    if 'PatientWeight' in ds:
+        val = ds.PatientWeight
+        mwl_item['patient']['weight'] = val
+    if 'PatientSize' in ds:
+        val = ds.PatientSize
+        print('------------------++++++++++++++++')
+        print(val)
+        mwl_item['patient']['patient_size'] = val
 #####################################################################################
 # Methods to convert worklist object to Dicom Object
 #####################################################################################
@@ -97,6 +115,29 @@ def fill_patient_details_from_mwl(mwl_ds,worklist):
     mwl_ds[0x10,0x20].value = worklist['patient']['patient_id']
     mwl_ds[0x10,0x30].value = change_date_to_dicom_format(worklist['patient']['dob'])
     mwl_ds[0x10,0x40].value = 'M' if worklist['patient']['gender'] == 'Male' else 'F'
+    mwl_ds[0x10,0x2000].value = worklist['patient']['med_alerts']
+    mwl_ds[0x10,0x2110].value = worklist['patient']['allergies']
+    if not 'PatientWeight' in mwl_ds:
+        if worklist['patient']['weight'] != '':
+            mwl_ds.add_new((0x10,0x1030),'DS',float(worklist['patient']['weight']))
+    else:
+        if worklist['patient']['weight'] != '':
+            mwl_ds[0x10,0x1030].value = float(worklist['patient']['weight'])
+    if not 'PatientSize' in mwl_ds:
+        if worklist['patient']['patient_size'] != '':
+            try:
+                size_val = float(worklist['patient']['patient_size'])
+                mwl_ds.add_new((0x10,0x1020),'DS',size_val)
+            except:
+                print('Error while parsing patient size')
+    else:
+        if worklist['patient']['patient_size'] != '':
+            try:
+                size_val = float(worklist['patient']['patient_size'])
+                mwl_ds[0x10,0x1020] = size_val
+            except:
+                print('Error while parsing patient size')
+
 
 def fill_isr_details_from_mwl(mwl_ds, worklist):
     mwl_ds[0x08,0x50].value = worklist['isr']['accession_number']
@@ -118,15 +159,37 @@ def fill_sps_details_from_mwl(mwl_ds, worklist):
 
     sps_seq[0x40,0x07].value = worklist['proc_info']['requested_proc_desc']
     sps_seq[0x40,0x02].value = change_date_to_dicom_format(worklist['sps']['start_date'])
+    sps_seq[0x0032, 0x1070].value = worklist['sps']['contrast_agent']
+    sps_seq[0x0040, 0x0400].value = worklist['sps']['comments']
+    sps_seq[0x0040, 0x0006].value = PersonName(str( worklist['sps']['operator']))
+    sps_seq[0x0040, 0x0012].value = worklist['sps']['pre_meds']
+    sps_seq[0x40,0x03].value = worklist['sps']['start_time']
+    if worklist['sps']['protocol_code'] != '':
+        protocol_seq = Dataset()
+        protocol_seq.CodeValue = worklist['sps']['protocol_code']
+        protocol_seq.CodingSchemeDesignator = worklist['sps']['protocol_code_scheme_designator']
+        protocol_seq.CodeMeaning = worklist['sps']['protocol_code_meaning']
+        sps_seq.ScheduledProtocolCodeSequence = [protocol_seq]
     #sps_seq[0x08,0x60] = worklist.sps.modality
 
 def fill_procedure_details_from_mwl(mwl_ds, worklist):
     mwl_ds[0x40,0x1001].value = worklist['proc_info']['proc_id']
+    mwl_ds[0x40,0x1003].value = worklist['proc_info']['proc_priority']
     mwl_ds[0x32,0x1060].value = worklist['proc_info']['requested_proc_desc']
     if worklist['proc_info']['study_uid'] == '':
         mwl_ds[0x20,0x0d].value = pydicom.uid.generate_uid()
     else:
         mwl_ds[0x20,0x0d].value = worklist['proc_info']['study_uid']
+    if not 'ReasonForTheRequestedProcedure' in mwl_ds:
+        mwl_ds.add_new((0x40,0x1002),'LO',worklist['proc_info']['request_reason'])
+    else:
+        mwl_ds[0x40,0x1002].value = worklist['proc_info']['request_reason']
+    if worklist['proc_info']['procedure_code'] != '':
+        protocol_seq = Dataset()
+        protocol_seq.CodeValue = worklist['proc_info']['procedure_code']
+        protocol_seq.CodingSchemeDesignator = worklist['proc_info']['proc_scheme_designator']
+        protocol_seq.CodeMeaning = worklist['proc_info']['procedure_code_meaning']
+        mwl_ds.RequestedProcedureCodeSequence = [protocol_seq]
 
 ###########################################################################################
 
@@ -164,7 +227,14 @@ def fill_sps_info(ds, mwl_item):
         'start_date':'',
         'sps_id': '',
         'sps_desc':'',
-        'status':''
+        'status':'',
+        'contrast_agent': '',
+        'pre_meds': '',
+        'comments': '',
+        'operator': '',
+        'protocol_code': '',
+        'protocol_code_meaning': '',
+        'protocol_code_scheme_designator': ''
     }
     sps = ds[0x0040,0x0100].value[0]
     #print sps
@@ -180,6 +250,9 @@ def fill_sps_info(ds, mwl_item):
     if 'ScheduledProcedureStepStartDate' in sps:
         val = sps.ScheduledProcedureStepStartDate
         mwl_item['sps']['start_date'] = parse_dicom_date(val)
+    if 'ScheduledProcedureStepStartTime' in sps:
+        val = sps.ScheduledProcedureStepStartTime
+        mwl_item['sps']['start_time'] = val
     if 'ScheduledProcedureStepID' in sps:
         val = sps.ScheduledProcedureStepID
         mwl_item['sps']['sps_id'] = val
@@ -189,12 +262,38 @@ def fill_sps_info(ds, mwl_item):
     if 'ScheduledProcedureStepStatus' in sps:
         val = sps.ScheduledProcedureStepStatus
         mwl_item['sps']['status'] = val
+    if 'RequestedContrastAgent' in sps:
+        val = sps.RequestedContrastAgent
+        mwl_item['sps']['contrast_agent'] = val
+    if 'PreMedication' in sps:
+        val = sps.PreMedication
+        mwl_item['sps']['pre_meds'] = val
+    if 'CommentsOnTheScheduledProcedureStep' in sps:
+        val = sps.CommentsOnTheScheduledProcedureStep
+        mwl_item['sps']['comments'] = val
+    if 'ScheduledPerformingPhysicianName' in sps:
+        if 'Alphabetic' in sps.ScheduledPerformingPhysicianName:
+            val = sps.ScheduledPerformingPhysicianName['Alphabetic']
+        else:
+            val = sps.ScheduledPerformingPhysicianName
+        names = parse_person_name(val)
+        mwl_item['sps']['operator'] = names[0] + ' ' + names[1]
+    if 'ScheduledProtocolCodeSequence' in sps:
+        val = sps.ScheduledProtocolCodeSequence
+        if 'CodeValue' in val:
+            mwl_item['sps']['protocol_code'] = val.CodeValue
+        if 'CodeMeaning' in val:
+            mwl_item['sps']['protocol_code_meaning'] = val.CodeMeaning
+        if 'CodingSchemeDesignator' in val:
+            mwl_item['sps']['protocol_code_scheme_designator'] = val.CodingSchemeDesignator
 
 def fill_proc_info(ds, mwl_item):
     mwl_item['proc_info'] = {
         'requested_proc_desc': '',
         'proc_id':'',
-        'study_uid':''
+        'study_uid':'',
+        'proc_priority': 'LOW',
+        'request_reason': ''
     }
     if 'RequestedProcedureDescription' in ds:
         val = ds.RequestedProcedureDescription
@@ -205,7 +304,20 @@ def fill_proc_info(ds, mwl_item):
     if 'StudyInstanceUID' in ds:
         val = ds.StudyInstanceUID
         mwl_item['proc_info']['study_uid'] = val
-
+    if 'RequestedProcedurePriority' in ds:
+        val = ds.RequestedProcedurePriority
+        mwl_item['proc_info']['proc_priority'] = val
+    if 'ReasonForTheRequestedProcedure' in ds:
+        val = ds.ReasonForTheRequestedProcedure
+        mwl_item['proc_info']['request_reason'] = val
+    if 'RequestedProcedureCodeSequence' in ds:
+        val = ds.RequestedProcedureCodeSequence
+        if 'CodeValue' in val:
+            mwl_item['proc_info']['procedure_code'] = val.CodeValue
+        if 'CodeMeaning' in val:
+            mwl_item['proc_info']['procedure_code_meaning'] = val.CodeMeaning
+        if 'CodingSchemeDesignator' in val:
+            mwl_item['proc_info']['proc_scheme_designator'] = val.CodingSchemeDesignator
 
 
 def from_worklist_get_patient_only(sample_wl_folder, worklist):
@@ -220,8 +332,6 @@ def from_worklist_get_patient_only(sample_wl_folder, worklist):
     del ds[0x20,0x000d]
     del ds[0x08,0x0005]
     #del ds[0x10,0x0020]
-    del ds[0x10,0x2000]
-    del ds[0x10,0x2110]
     return ds
 def from_worklist_json(sample_wl_folder, worklist):
     ds = read_wl_file(os.path.join(sample_wl_folder,'wklist1.wl'))
@@ -234,6 +344,7 @@ def from_worklist_json(sample_wl_folder, worklist):
 
 def from_dicom_json(json_obj):
     mwl_item = {}
+    print (str(json_obj))
     ds = convert_to_dataset(json_obj)
     fill_patient_info(ds,mwl_item)
     fill_isr_info(ds,mwl_item)
