@@ -31,15 +31,25 @@
 		<div class="row">
 			<div class="col">
 		  		<label for="birth_date"><h6><i class="fa fa-calendar-alt"></i> Date of Birth</h6></label>
-		  		<input type="date" class="form-control" id="birth_date" name="birth_date" value="{{=patient.birth_date}}">
+		  		<input type="date" class="form-control" id="birth_date" name="birth_date" value="{{=patient.birth_date}}" required>
 			</div>
 			<div class="col">
 		  		<label for="weight"><h6><i class="fa fa-weight"></i> Weight</h6></label>
-		  		<input type="number" class="form-control" id="weight" name="weight" required placeholder="Weight" value="{{=patient.weight}}">
+		  		<input type="number" class="form-control" id="weight" name="weight" placeholder="Weight" value="{{=patient.weight}}">
 			</div>
 			<div class="col">
 				<label for="first_name"><h6><i class="fa fa-tape"></i> Size</h6></label>
-		  		<input type="text" class="form-control" id="patient_size" name="patient_size" required placeholder="Size" value="{{=patient.patient_size}}">
+		  		<input type="text" class="form-control" id="patient_size" name="patient_size" placeholder="Size" value="{{=patient.patient_size}}">
+			</div>
+		</div>
+		<div class="row">
+			<div class="col">
+		  		<label for="medical_alerts"><h6><i class="fa fa-bell"></i>Medical Alerts</h6></label>
+		  		<input type="text" class="form-control" id="medical_alerts" name="medical_alerts" placeholder="Medical Alerts" value="{{=patient.medical_alerts}}">
+			</div>
+			<div class="col">
+		  		<label for="allergies"><h6><i class="fa fa-allergies"></i>Allergies</h6></label>
+		  		<input type="text" class="form-control" id="allergies" name="allergies" placeholder="Allergies" value="{{=patient.allergies}}">
 			</div>
 		</div>
 		<br>

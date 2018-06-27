@@ -37,6 +37,8 @@
             <th>Size</th>
             <th>Patient Id</th>
             <th>Birth Date</th>
+            <th>Medical Alerts</th>
+            <th>Allergies</th>
             <th>Options</th>
         </tr>
         {{for patient in rows:}}
@@ -49,6 +51,8 @@
                 <td>{{=patient.patient_size}}</td>
                 <td>{{=patient.patient_id}}</td>
                 <td>{{=patient.birth_date}}</td>
+                <td>{{=patient.medical_alerts}}</td>
+                <td>{{=patient.allergies}}</td>
                 <td>
                     <span>
                         <a href="{{=URL('editpatient',vars=({'id':patient.id}))}}"><span class="fas fa-edit"></span></a>
