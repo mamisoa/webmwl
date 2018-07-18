@@ -3,6 +3,7 @@ db.define_table('station',
                Field('name', requires = IS_NOT_EMPTY()),
                Field('modality', requires = IS_NOT_EMPTY()),
                Field('AE_title', requires = IS_NOT_EMPTY()),
+               Field('DICOM_Compliant','boolean', default=False),
                auth.signature)
 
 db.define_table('arcconfig',

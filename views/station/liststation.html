@@ -33,6 +33,7 @@
             <th>Station Name</th>
             <th>AE title</th>
             <th>Modality</th>
+            <th>Dicom Compliant</th>
             <th>Options</th>
         </tr>
         {{for station in rows:}}
@@ -41,6 +42,14 @@
                 <td>{{=station.name}}</td>
                 <td>{{=station.AE_title}}</td>
                 <td>{{=station.modality}}</td>
+                <td>{{
+                  compliance = station.DICOM_Compliant
+                  if compliance is not None and not compliance:
+                  response.write('NO')
+                  else:
+                  response.write('YES')
+                  pass
+                  }}</td>
                 <td>
                     <span>
                         <a href="{{=URL('editstation',vars=({'id':station.id}))}}"><span class="fas fa-edit"></span></a>

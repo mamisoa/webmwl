@@ -80,6 +80,22 @@ mwlapp.controller('MwlListController', ['$scope','$http', function($scope, $http
       }
       return Math.abs(m) + ' months'
   }
+  $scope.getStationDcmCompliance = function(mwl_item) {
+    var item = mwl_item
+    var qparams = {params: {'search_str': mwl_item['sps']['station_name']}}
+    var promise = $http.get('get_stations', qparams)
+    promise.then (function (response) {
+      var matching_stations = response.data['result']
+      for (i=0; i<matching_stations.length;i++) {
+        if (matching_stations[i]['name'] === mwl_item['sps']['station_name']) {
+          mwl_item['sps']['station_dicom_compliant'] = matching_stations[i]['DICOM_Compliant']
+        }
+      }
+    })
+    .catch( function(error) {
+      console.log('Error ='+ error)
+    })
+  }
   $scope.loadMwlItems = function() {
     $scope.loading = true
     var qparams = {params: {'status': $scope.selectedStatus,
@@ -95,6 +111,8 @@ mwlapp.controller('MwlListController', ['$scope','$http', function($scope, $http
       $scope.mwlItems.push.apply($scope.mwlItems,response.data['result']['items'])
       for (i=0; i< $scope.mwlItems.length; i++) {
         $scope.mwlItems[i]['patient']['age'] = getAge($scope.mwlItems[i]['patient']['dob'])
+        $scope.mwlItems[i]['sps']['station_dicom_compliant'] = false
+        $scope.getStationDcmCompliance($scope.mwlItems[i])
       }
       $scope.totalCount = response.data['result']['count']
       $scope.pages = Math.floor($scope.totalCount / $scope.pageSize)
@@ -166,6 +184,31 @@ mwlapp.controller('MwlListController', ['$scope','$http', function($scope, $http
             swal({
               title: "Success",
               text: "The selected item has been deleted",
+              icon: "success",
+              button: "OK",
+            })
+            $scope.loadMwlItems()
+          })
+      }
+    })
+  }
+  $scope.complete_wl = function(index) {
+    var worklist = $scope.mwlItems[index]
+    swal({
+      title: "Are you sure?",
+      text: "The selected worklist item will be marked as Completed !",
+      icon: "warning",
+      buttons: true,
+      dangerMode: true,
+    })
+    .then((willComplete) => {
+      if (willComplete) {
+          worklist['sps']['status'] = 'COMPLETED'
+          var promise = $http.post('complete_mwl', params=worklist)
+          promise.then( function(data) {
+            swal({
+              title: "Success",
+              text: "The selected item has been marked as complete",
               icon: "success",
               button: "OK",
             })
@@ -339,6 +382,7 @@ mwlapp.controller('MwlListController', ['$scope','$http', function($scope, $http
       $scope.cancel()
     })
   }
+
   $scope.loadStations = function(search_str) {
     $scope.stations = []
     var qparams = {params: {'search_str': search_str}}
@@ -399,7 +443,7 @@ mwlapp.controller('MwlListController', ['$scope','$http', function($scope, $http
                 })
   $scope.$watch(function(scope) { return scope.popup1.opened },
                 function() {
-                  if(! $scope.popup1.opened) {
+                  if(! $scope.popup1.opened && $scope.selectedDate === 'DATE') {
                     $scope.loadMwlItems()
                   }
                 })

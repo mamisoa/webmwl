@@ -6,6 +6,7 @@
 
 # ---- example index page ----
 from mwlarcinterface import MwlInterface
+from dicomdatamapper import dump_dicom_obj, from_worklist_json
 from gluon.contrib import simplejson
 import os
 
@@ -60,6 +61,21 @@ def save_mwl():
     sample_wl_folder = os.path.join(request.folder, 'modules')
     result = mwl.create_patient_and_worklist(sample_wl_folder,worklist)
     return response.json(result)
+
+def complete_mwl():
+    print(request.vars)
+    worklist = simplejson.loads(request.body.read())
+    print(worklist)
+    mwl = MwlInterface(get_arc_config())
+    sample_wl_folder = os.path.join(request.folder, 'modules')
+    result = mwl.create_patient_and_worklist(sample_wl_folder,worklist)
+    completed_items_folder = os.path.join(request.folder, 'completed_items')
+    dicom_obj = from_worklist_json(sample_wl_folder,worklist)
+    dump_file = os.path.join(completed_items_folder,worklist['proc_info']['study_uid'])
+    cmd_folder = os.path.join(request.folder, 'modules')
+    dump_dicom_obj(cmd_folder,dicom_obj,dump_file)
+
+    #return response.json(result)
 
 
 def get_stations():

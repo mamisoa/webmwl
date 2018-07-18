@@ -31,8 +31,9 @@ def addstation():
 	name = request.vars.name
 	modality = request.vars.modality
 	ae_title = request.vars.AE_title
+	dcm_compliant = 'DICOM_Compliant' in request.vars
 	if len(request.vars)>0:
-		db.station.insert(name=name, modality=modality,AE_title=ae_title)
+		db.station.insert(name=name, modality=modality,AE_title=ae_title, DICOM_Compliant=dcm_compliant)
 		redirect(URL('liststation'))
 	modalities = ["CR", "CT", "DX", "MR", "MG", "NM","US", "ES", "EPS","ECG","BMD","BI","PT","OPT", "OT", "RF", "XA"]
 	return locals()

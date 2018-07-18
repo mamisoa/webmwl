@@ -3,7 +3,7 @@ from pydicom.dataelem import DataElement
 from pydicom.valuerep import PersonName
 import pydicom
 import string, random
-import os
+import os, subprocess
 
 def parse_person_name(name):
     name_components = name.split('^')
@@ -164,7 +164,9 @@ def fill_sps_details_from_mwl(mwl_ds, worklist):
     sps_seq[0x0040, 0x0006].value = PersonName(str( worklist['sps']['operator']))
     sps_seq[0x0040, 0x0012].value = worklist['sps']['pre_meds']
     sps_seq[0x40,0x03].value = worklist['sps']['start_time']
-    if worklist['sps']['protocol_code'] != '':
+    if 'status' in worklist['sps'] and worklist['sps']['status'] != '' :
+        sps_seq.ScheduledProcedureStepStatus = worklist['sps']['status']
+    if 'protocol_code' in worklist['sps'] and worklist['sps']['protocol_code'] != '':
         protocol_seq = Dataset()
         protocol_seq.CodeValue = worklist['sps']['protocol_code']
         protocol_seq.CodingSchemeDesignator = worklist['sps']['protocol_code_scheme_designator']
@@ -184,7 +186,7 @@ def fill_procedure_details_from_mwl(mwl_ds, worklist):
         mwl_ds.add_new((0x40,0x1002),'LO',worklist['proc_info']['request_reason'])
     else:
         mwl_ds[0x40,0x1002].value = worklist['proc_info']['request_reason']
-    if worklist['proc_info']['procedure_code'] != '':
+    if 'procedure_code' in worklist['proc_info'] and worklist['proc_info']['procedure_code'] != '':
         protocol_seq = Dataset()
         protocol_seq.CodeValue = worklist['proc_info']['procedure_code']
         protocol_seq.CodingSchemeDesignator = worklist['proc_info']['proc_scheme_designator']
@@ -353,6 +355,15 @@ def from_dicom_json(json_obj):
     print (ds)
     #print (mwl_item)
     return mwl_item
+def dump_dicom_obj(command_path, ds,filename):
+    ds.save_as(filename+'.dcm')
+    dcm2_xml_command = os.path.join(command_path,'dcm2xml')
+    cmd_args = [dcm2_xml_command, filename+'.dcm']
+    out_file = filename + '.xml'
+    with open(out_file, 'w') as outxml_file:
+        subprocess.call(cmd_args, stdout=outxml_file)
+
+
 
 if __name__== '__main__':
     mwl_item = {}
