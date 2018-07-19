@@ -10,6 +10,7 @@ functionalities of
 The following are the python modules which are required to be installed on the site-packages folder of Web2py.
 - pydicom
 - requests
+
 When you install these 2 modules it would install other dependencies as well. 
 Use the following pip command to install to a specific folder.
 ```
